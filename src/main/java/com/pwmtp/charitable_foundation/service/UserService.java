@@ -4,10 +4,13 @@ import com.pwmtp.charitable_foundation.domain.User;
 import com.pwmtp.charitable_foundation.domain.UserRole;
 import com.pwmtp.charitable_foundation.repository.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserDAO USER_DAO;
 
     @Autowired
@@ -49,4 +52,10 @@ public class UserService {
         USER_DAO.deleteAll();
     }
 
+    /*---------- User details ----------*/
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return getByEmail(email);
+    }
 }
