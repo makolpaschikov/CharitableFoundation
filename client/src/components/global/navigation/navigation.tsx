@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom'
-import styles from './navigation.module.scss'
+import a from 'asd'
 
 export const NAVIGATION_PADDING = 'pt-16'
 const NAVIGATION_ITEMS: {label: string; target: string}[] = [

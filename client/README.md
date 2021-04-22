@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+Инструкции по работе с клиентом
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Разработка
 
-## Available Scripts
+До начала разработки нужно перейти в папку клиента и установить зависимости
 
-In the project directory, you can run:
+```
+$ cd client
+$ npm install
+```
 
-### `npm start`
+Обычно один раз установить их достаточно, но с ходом разработки могут появляться новые, поэтому периодически могут появляться ошибки вида "cannot find module ...", это значит, что нужно запустить `npm install` ещё раз.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Далее для старта клиента
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+$ npm start
+```
 
-### `npm test`
+Команда сама запустит сервер на http://localhost:3000 и откроет страницу в браузере. Все запросы которые реакт не умеет обрабатывать (то есть запросы к API) будут проксироваться на адрес http://localhost:8080 где основной сервер должен с ними разобраться и вернуть ответ. То есть для разработки надо запустить обе программы: клиент и сервер, клиент сам разберётся что куда отправлять.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Продакшн
 
-### `npm run build`
+В проде нужно собрать проект
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+$ cd client
+$ npm run build
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Появится папка `build` в которой лежат все статические файлы, нужные клиенту.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Что должен делать сервер
 
-### `npm run eject`
+Правильно отвечать на все GET запросы.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Если путь запроса совпадает с путём к какому-нибудь файлу в `build`, отправлять этот файл. Пример файлов, которые сервер должен вернуть на соответствующие запросы:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    - `/static/js/main.asd91s.chunk.js` -> `client/build/static/js/main.asd91s.chunk.js`
+    - `/static/css/main.asd91s.chunk.css` -> `client/build/static/css/main.chunk.asd91s.css`
+    - `/favicon.ico` -> `client/build/favicon.ico`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. На все остальные запросы (кроме ендпоинтов API) возвращать файл `build/index.html`. Пример:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    - `/` -> `client/build/index.html`
+    - `/index.html` -> `client/build/index.html`
+    - `/profile` -> `client/build/index.html`
+    - `/some-page-that-doesnt-exist` -> `client/build/index.html`
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Для определенности я бы порекомендовал всем ендпоинты API делать пути `/api/...`, например `/api/login`, `/api/get-catalog` или `/api/restore-password`
