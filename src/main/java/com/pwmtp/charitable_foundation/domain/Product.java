@@ -10,10 +10,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @CollectionTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"))
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
+
     private Long userID;
     private String name;
     private String description;
-    private Category category;
+
 
     /*---------- Getters and setters ----------*/
 

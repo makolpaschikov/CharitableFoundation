@@ -1,5 +1,5 @@
 package com.pwmtp.charitable_foundation.domain;
 
-public enum Category {
+public enum ProductCategory {
 
 }
