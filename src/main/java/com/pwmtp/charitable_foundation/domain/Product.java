@@ -10,10 +10,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private User user;
-
+    private Long userID;
     private String name;
     private String description;
 
@@ -40,11 +37,11 @@ public class Product {
         this.description = description;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserID() {
+        return userID;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 }

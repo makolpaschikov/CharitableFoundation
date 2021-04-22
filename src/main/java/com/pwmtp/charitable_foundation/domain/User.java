@@ -21,9 +21,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-    @OneToMany(mappedBy="usr")
-    private List<Product> products;
-
     private String name;
     private String email;
     private String password;
@@ -102,11 +99,4 @@ public class User implements UserDetails {
         this.number = number;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }
