@@ -7,21 +7,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserDAO USER_DAO;
+    private final PasswordEncoder PASSWORD_ENCODER;
 
     @Autowired
-    public UserService(UserDAO USER_DAO) {
-        this.USER_DAO = USER_DAO;
+    public UserService(UserDAO userDAO, PasswordEncoder passwordEncoder) {
+        this.USER_DAO = userDAO;
+        this.PASSWORD_ENCODER = passwordEncoder;
+    }
+
+    /*---------- Encoder ----------*/
+
+    public PasswordEncoder getPasswordEncoder() {
+        return PASSWORD_ENCODER;
     }
 
     /*---------- Save ----------*/
 
-    public User save(User user) {
-        return USER_DAO.save(user);
+    public void update(User user) {
+        USER_DAO.save(user);
+    }
+
+    public void register(User user) {
+        user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
+        USER_DAO.save(user);
     }
 
     /*---------- Get ----------*/
