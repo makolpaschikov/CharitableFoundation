@@ -24,7 +24,6 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String number;
-    private Boolean isConfirmed;
 
 
     /*---------- User details ----------*/
@@ -46,10 +45,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
-    }
-
-    public void setAuthorities(Set<UserRole> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -101,14 +96,6 @@ public class User implements UserDetails {
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public Boolean isConfirmed() {
-        return isConfirmed;
-    }
-
-    public void setConfirmed(Boolean confirmed) {
-        this.isConfirmed = confirmed;
     }
 
 }
