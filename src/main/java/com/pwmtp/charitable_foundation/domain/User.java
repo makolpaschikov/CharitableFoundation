@@ -23,6 +23,7 @@ public class User implements UserDetails {
 
     private String name;
     private String email;
+    private String activationCode;
     private String password;
     private String number;
 
@@ -89,6 +90,14 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
     }
 
     public String getNumber() {
