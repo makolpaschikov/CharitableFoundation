@@ -57,6 +57,9 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         registry
                 .addResourceHandler("/robots.txt")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/client/build/robots.txt");
+        registry
+                .addResourceHandler("/**")
+                .addResourceLocations("file:/" + PROJECT_DIR + "/client/build/index.html");
     }
 
     @Override
