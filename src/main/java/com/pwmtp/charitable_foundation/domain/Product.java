@@ -13,7 +13,7 @@ public class Product {
     private Long userID;
     private String name;
     private String description;
-
+    private Category category;
 
     /*---------- Getters and setters ----------*/
 
