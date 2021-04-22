@@ -4,8 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 public enum UserRole implements GrantedAuthority {
     MEDICAL_FACILITY,
-    FOUNDATION_EMPLOYEE,
-    FOUNDATION_DIRECTOR;
+    DISTRIBUTOR;
 
     @Override
     public String getAuthority() {

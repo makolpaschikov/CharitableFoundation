@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,9 +23,9 @@ public class User implements UserDetails {
 
     private String name;
     private String email;
+    private String activationCode;
     private String password;
     private String number;
-    private Boolean isConfirmed;
 
 
     /*---------- User details ----------*/
@@ -46,10 +47,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
-    }
-
-    public void setAuthorities(Set<UserRole> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -95,20 +92,20 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
     public String getNumber() {
         return number;
     }
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public Boolean isConfirmed() {
-        return isConfirmed;
-    }
-
-    public void setConfirmed(Boolean confirmed) {
-        this.isConfirmed = confirmed;
     }
 
 }
