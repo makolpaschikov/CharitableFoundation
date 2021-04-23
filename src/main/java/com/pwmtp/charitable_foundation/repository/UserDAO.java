@@ -8,6 +8,5 @@ public interface UserDAO extends CrudRepository<User, Long> {
     User findUserById(Long id);
     User findUserByEmail(String email);
     User findUserByRoles(UserRole role);
-
     User findUserByActivationCode(String code);
 }

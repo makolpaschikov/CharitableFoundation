@@ -34,53 +34,25 @@ public class SignupController {
             boolean is_password_correct;
 
             //Checking password for rules
-
-            //At least one symbol should be upper case
-            boolean has_upper_char = false;
-
-            //At least one number presents
-            boolean has_number = false;
-
-            char[] pas = user.getPassword().toCharArray();
-
-            for (char ch : pas) {
-                if (!has_upper_char && Character.isUpperCase(ch)){
-                    has_upper_char = true;
-                }
-
-                if (!has_number && Character.isDigit(ch)){
-                    has_number = true;
-                }
+            boolean has_upper_char = false; //At least one symbol should be upper case
+            boolean has_number = false; //At least one number presents
+            for (char ch : user.getPassword().toCharArray()) {
+                if (!has_upper_char && Character.isUpperCase(ch)) has_upper_char = true;
+                if (!has_number && Character.isDigit(ch)) has_number = true;
             }
 
             is_password_correct = has_upper_char && has_number;
-
-            if (!is_password_correct){
-                if (!has_upper_char){
-                    bindingResult.addError(new FieldError("user","password", "Password does not have any upper case chars!"));
-                }
-                if (!has_number){
-                    bindingResult.addError(new FieldError("user","password", "Password does not have any numbers!"));
-                }
+            if (!is_password_correct) {
+                if (!has_upper_char)
+                    bindingResult.addError(new FieldError("user", "password", "Password does not have any upper case chars!"));
+                if (!has_number)
+                    bindingResult.addError(new FieldError("user", "password", "Password does not have any numbers!"));
             }
 
             //Checking passwords for match
-
-            is_passwords_match = user.getPassword().length() == user.getPassword_conf().length();
-
-            if (is_passwords_match){
-                char[] pas_conf = user.getPassword_conf().toCharArray();
-
-                for (int i = 0; i < user.getPassword().length(); i++) {
-                    if (pas[i] != pas_conf[i]) {
-                        is_passwords_match = false;
-                        break;
-                    }
-                }
-            }
-
+            is_passwords_match = user.getPassword().equals(user.getPasswordConf());
             if (!is_passwords_match){
-                bindingResult.addError(new FieldError("user","password_conf", "Passwords do not match!"));
+                bindingResult.addError(new FieldError("user","passwordConf", "Passwords do not match!"));
             }
         }
 
@@ -93,28 +65,20 @@ public class SignupController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("signup");
         }else{
-
-            //TODO - проверка на уже существующего пользователя
-            /*if (USER_SERVICE.getByEmail(user.getEmail()) != null){
-
-            }*/
-
             USER_SERVICE.register(user);
-            return new RedirectView("/login");
+            return new RedirectView("/activate-account");
         }
     }
 
     @GetMapping("/activate/{code}")
-    public String activate(Model model, @PathVariable String code) {
+    public Object activate(@PathVariable String code, Model model) {
         boolean isActivated = USER_SERVICE.activateUser(code);
-
         if(isActivated) {
             model.addAttribute("message", "User successfully activated!");
         } else {
             model.addAttribute("message", "Activation code is not found!");
         }
-
-        return "login";
+        return new RedirectView("/login");
     }
 
 }
