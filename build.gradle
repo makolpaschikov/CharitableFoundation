@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.springframework.integration:spring-integration-mail:5.4.6'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.4.5'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mustache', version: '2.3.8.RELEASE'
+    //implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mustache', version: '2.3.8.RELEASE'
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
