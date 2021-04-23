@@ -30,7 +30,10 @@ public class User implements UserDetails {
     @NotBlank(message = "Email cannot be empty!")
     @Email(message = "Incorrect email address")
     private String email;
+
     private String activationCode;
+
+    private boolean activate;
 
     @NotBlank(message = "Password cannot be empty!")
     @Length(min = 8, message = "Password length should have at least 8 chars!")
@@ -130,6 +133,14 @@ public class User implements UserDetails {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public void setActivated() {
+        activate = true;
+    }
+
+    public boolean isActivated() {
+        return activate;
     }
 
 }

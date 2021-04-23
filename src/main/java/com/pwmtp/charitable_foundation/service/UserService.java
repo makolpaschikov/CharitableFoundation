@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
+
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -20,6 +23,9 @@ public class UserService implements UserDetailsService {
         this.USER_DAO = userDAO;
         this.PASSWORD_ENCODER = passwordEncoder;
     }
+
+    @Autowired
+    private MailSender mailSender;
 
     /*---------- Encoder ----------*/
 
@@ -35,7 +41,31 @@ public class UserService implements UserDetailsService {
 
     public void register(User user) {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
+        user.setActivationCode(UUID.randomUUID().toString());
+
         USER_DAO.save(user);
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format("Hello, %s!\nWelcome to CharitableFoundationWebsite! " +
+                    "\nTo activate your account, visit " + "http://localhost:8080/activate/%s",
+                    user.getName(),
+                    user.getActivationCode());
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
+    }
+
+    public boolean activateUser(String code) {
+        User user = USER_DAO.findUserByActivationCode(code);
+
+        if(user == null) {
+            return false;
+        }
+
+        user.setActivationCode(null);
+
+        USER_DAO.save(user);
+
+        return true;
     }
 
     /*---------- Get ----------*/
