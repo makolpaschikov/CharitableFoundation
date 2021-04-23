@@ -70,6 +70,7 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                     .mvcMatchers("/**").permitAll()
                     .anyRequest().authenticated()
