@@ -19,6 +19,10 @@ body {
     box-sizing: border-box;
 }
 
+.reset-outline:focus {
+    outline: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

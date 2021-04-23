@@ -2,19 +2,40 @@ import {
     Navigation,
     NAVIGATION_PADDING,
 } from 'src/components/global/navigation/navigation'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import {Index} from 'src/pages/Index'
 import clsx from 'clsx'
+import {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {AppDispatch, AppState} from 'src/store'
+import {loadUser} from 'src/store/user'
+import {LoadingStatus} from 'src/util/loading-status'
+import {showErrorNotification} from 'src/store/notifications/actions'
+import {Notifications} from 'src/components/global/notifications/notifications'
 
-export const App = () => (
-    <div className={clsx(NAVIGATION_PADDING, 'bg-gray-100 min-h-screen')}>
-        <BrowserRouter>
+export const App = () => {
+    const dispatch = useDispatch<AppDispatch>()
+    const userState = useSelector((state: AppState) => state.user)
+
+    useEffect(() => {
+        dispatch(loadUser())
+    }, [dispatch])
+    useEffect(() => {
+        if (userState.status === LoadingStatus.ERROR) {
+            dispatch(showErrorNotification(userState.error))
+        }
+    }, [dispatch, userState])
+
+    return (
+        <div className={clsx(NAVIGATION_PADDING, 'bg-white min-h-screen')}>
             <Navigation />
-            <div className={'container bg-gray-200 min-h-screen'}>
+            <div className={'container bg-background min-h-screen'}>
                 <Switch>
+                    <Route exact path="/" component={Index} />
                     <Route exact path="/" component={Index} />
                 </Switch>
             </div>
-        </BrowserRouter>
-    </div>
-)
+            <Notifications />
+        </div>
+    )
+}

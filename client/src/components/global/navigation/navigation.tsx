@@ -9,7 +9,7 @@ const NAVIGATION_ITEMS: {label: string; target: string}[] = [
 ]
 
 export const Navigation = () => (
-    <nav className={'fixed inset-x-0 top-0 h-16 bg-gray-400'}>
+    <nav className={'fixed inset-x-0 top-0 h-16 bg-primary text-white'}>
         <div className={'container flex h-full'}>
             {NAVIGATION_ITEMS.map(({label, target}) => (
                 <Link
