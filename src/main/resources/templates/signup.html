@@ -37,9 +37,9 @@
         <tr>
             <td>Password Conformation:</td>
             <td><label>
-                <input type="password" th:field="*{password_conf}"/>
+                <input type="password" th:field="*{passwordConf}"/>
             </label></td>
-            <td th:if="${#fields.hasErrors('password_conf')}" th:errors="*{password_conf}">Password Conf Error</td>
+            <td th:if="${#fields.hasErrors('passwordConf')}" th:errors="*{passwordConf}">Password Conf Error</td>
         </tr>
         <tr>
             <td>Phone Number:</td>

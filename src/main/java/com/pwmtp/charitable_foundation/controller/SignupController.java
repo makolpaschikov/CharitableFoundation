@@ -3,12 +3,10 @@ package com.pwmtp.charitable_foundation.controller;
 import com.pwmtp.charitable_foundation.domain.User;
 import com.pwmtp.charitable_foundation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -31,79 +29,53 @@ public class SignupController {
 
     @PostMapping
     public Object register(@Valid User user, BindingResult bindingResult) {
-        if (bindingResult.getFieldErrorCount("password") == 0){
-            boolean is_passwords_match;
-            boolean is_password_correct;
-
-            //Checking password for rules
-
-            //At least one symbol should be upper case
-            boolean has_upper_char = false;
-
-            //At least one number presents
-            boolean has_number = false;
-
-            char[] pas = user.getPassword().toCharArray();
-
-            for (char ch : pas) {
-                if (!has_upper_char && Character.isUpperCase(ch)){
-                    has_upper_char = true;
-                }
-
-                if (!has_number && Character.isDigit(ch)){
-                    has_number = true;
-                }
-            }
-
-            is_password_correct = has_upper_char && has_number;
-
-            if (!is_password_correct){
-                if (!has_upper_char){
-                    bindingResult.addError(new FieldError("user","password", "Password does not have any upper case chars!"));
-                }
-                if (!has_number){
-                    bindingResult.addError(new FieldError("user","password", "Password does not have any numbers!"));
-                }
-            }
-
-            //Checking passwords for match
-
-            is_passwords_match = user.getPassword().length() == user.getPassword_conf().length();
-
-            if (is_passwords_match){
-                char[] pas_conf = user.getPassword_conf().toCharArray();
-
-                for (int i = 0; i < user.getPassword().length(); i++) {
-                    if (pas[i] != pas_conf[i]) {
-                        is_passwords_match = false;
-                        break;
-                    }
-                }
-            }
-
-            if (!is_passwords_match){
-                bindingResult.addError(new FieldError("user","password_conf", "Passwords do not match!"));
-            }
-        }
-
-        if (bindingResult.getFieldErrorCount("number") == 0){
-            if (user.getNumber().toCharArray()[0] != '+' && user.getNumber().length()==12){
-                bindingResult.addError(new FieldError("user","number", "Phone number should only contain 11 numbers!"));
-            }
-        }
-
+        findErrors(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ModelAndView("signup");
-        }else{
-
-            //TODO - проверка на уже существующего пользователя
-            /*if (USER_SERVICE.getByEmail(user.getEmail()) != null){
-
-            }*/
-
+        } else {
             USER_SERVICE.register(user);
-            return new RedirectView("/login");
+            return new RedirectView("/activate-account");
         }
+    }
+
+    @GetMapping("/activate/{code}")
+    public Object activate(@PathVariable String code, Model model) {
+        boolean isActivated = USER_SERVICE.activateUser(code);
+        if(isActivated) {
+            model.addAttribute("message", "User successfully activated!");
+        } else {
+            model.addAttribute("message", "Activation code is not found!");
+        }
+        return new RedirectView("/login");
+    }
+
+    private void findErrors(User user, BindingResult bindingResult) {
+        //Checking passwords
+        if (bindingResult.getFieldErrorCount("password") == 0) {
+            boolean hasUpperChar = false; //At least one symbol should be upper case
+            boolean hasNumber = false; //At least one number presents
+            for (char ch : user.getPassword().toCharArray()) {
+                if (!hasUpperChar && Character.isUpperCase(ch)) hasUpperChar = true;
+                if (!hasNumber && Character.isDigit(ch)) hasNumber = true;
+            }
+            if (!hasUpperChar)
+                bindingResult.addError(new FieldError("user", "password", "Password does not have any upper case chars!"));
+            if (!hasNumber)
+                bindingResult.addError(new FieldError("user", "password", "Password does not have any numbers!"));
+
+            // Checking passwords for match
+            if (!user.getPassword().equals(user.getPasswordConf())) {
+                bindingResult.addError(new FieldError("user", "passwordConf", "Passwords do not match!"));
+            }
+        }
+
+        //Checking phone numbers
+        if (bindingResult.getFieldErrorCount("number") == 0) {
+            if (user.getNumber().toCharArray()[0] != '+' && user.getNumber().length() == 12) {
+                bindingResult.addError(new FieldError("user", "number", "Phone number should only contain 11 numbers!"));
+            }
+        }
+
     }
 
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -30,7 +30,10 @@ public class User implements UserDetails {
     @NotBlank(message = "Email cannot be empty!")
     @Email(message = "Incorrect email address")
     private String email;
+
     private String activationCode;
+
+    private boolean activate;
 
     @NotBlank(message = "Password cannot be empty!")
     @Length(min = 8, message = "Password length should have at least 8 chars!")
@@ -38,7 +41,7 @@ public class User implements UserDetails {
 
     @Transient
     @NotBlank(message = "Password conformation cannot be empty!")
-    private String password_conf;
+    private String passwordConf;
 
     @NotBlank(message = "Number cannot be empty!")
     @Length(min = 11, max = 12, message = "Incorrect phone number!")
@@ -60,12 +63,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getPassword_conf() {
-        return password_conf;
+    public String getPasswordConf() {
+        return passwordConf;
     }
 
-    public void setPassword_conf(String password_conf) {
-        this.password_conf = password_conf;
+    public void setPasswordConf(String passwordConf) {
+        this.passwordConf = passwordConf;
     }
 
     @Override
@@ -75,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return activate;
     }
 
     @Override
@@ -132,4 +135,26 @@ public class User implements UserDetails {
         this.number = number;
     }
 
+    public void setActivated(boolean activate) {
+        this.activate = activate;
+    }
+
+    public boolean isActivated() {
+        return activate;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
