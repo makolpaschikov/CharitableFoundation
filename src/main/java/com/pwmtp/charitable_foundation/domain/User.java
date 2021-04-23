@@ -1,9 +1,12 @@
 package com.pwmtp.charitable_foundation.domain;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -21,11 +24,25 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
+    @NotBlank(message = "Name cannot be empty!")
     private String name;
-    private String email;
-    private String password;
-    private String number;
 
+    @NotBlank(message = "Email cannot be empty!")
+    @Email(message = "Incorrect email address")
+    private String email;
+    private String activationCode;
+
+    @NotBlank(message = "Password cannot be empty!")
+    @Length(min = 8, message = "Password length should have at least 8 chars!")
+    private String password;
+
+    @Transient
+    @NotBlank(message = "Password conformation cannot be empty!")
+    private String password_conf;
+
+    @NotBlank(message = "Number cannot be empty!")
+    @Length(min = 11, max = 12, message = "Incorrect phone number!")
+    private String number;
 
     /*---------- User details ----------*/
 
@@ -41,6 +58,14 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword_conf() {
+        return password_conf;
+    }
+
+    public void setPassword_conf(String password_conf) {
+        this.password_conf = password_conf;
     }
 
     @Override
@@ -89,6 +114,14 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
     }
 
     public String getNumber() {
