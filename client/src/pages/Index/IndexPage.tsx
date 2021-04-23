@@ -1,3 +1,4 @@
+import {Test} from 'src/components/Test'
 import './Index.scss'
 
 export const Index = () => {
@@ -8,6 +9,8 @@ export const Index = () => {
                 благотворительного фонда «Национальный фонд помощи медицинским
                 учреждениям Фондздрав»!
             </h1>
+            <hr className={'mt-16'} />
+            <Test />
         </div>
     )
 }
