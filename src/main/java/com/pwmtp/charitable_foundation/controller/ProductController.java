@@ -37,8 +37,10 @@ public class ProductController {
             @RequestParam String category,
             @RequestParam List<MultipartFile> images
     ) {
-        PRODUCT_SERVICE.addProduct(new Product(name, description, ProductCategory.valueOf(category), user.getId()));
-        return new ResponseEntity<>("the product has been saved", HttpStatus.OK);
+        return PRODUCT_SERVICE.addProduct(user, images,
+                new Product(name, description, ProductCategory.valueOf(category), user.getId()))
+                ? new ResponseEntity<>("the product has been saved", HttpStatus.OK)
+                : new ResponseEntity<>("the product could not be saved", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
@@ -54,8 +56,9 @@ public class ProductController {
 
     @PreAuthorize("hasAuthority('DISTRIBUTOR')")
     @RequestMapping(value = "/remove-product", method = RequestMethod.DELETE)
-    public ResponseEntity<String> removeProduct(@RequestParam Long productID) {
-        PRODUCT_SERVICE.deleteByID(productID);
-        return new ResponseEntity<>("product has been successfully uninstalled", HttpStatus.OK);
+    public ResponseEntity<String> removeProduct(@AuthenticationPrincipal User user, @RequestParam Long productID) {
+        return PRODUCT_SERVICE.deleteByID(user.getId(), productID)
+                ? new ResponseEntity<>("product has been successfully uninstalled", HttpStatus.OK)
+                : new ResponseEntity<>("product could not be removed", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
