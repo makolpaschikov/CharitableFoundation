@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    @RequestMapping(value = "/me", method = RequestMethod.POST)
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
     public ResponseEntity<Object> getUser(@AuthenticationPrincipal User user) {
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
