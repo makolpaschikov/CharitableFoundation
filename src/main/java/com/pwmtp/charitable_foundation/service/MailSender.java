@@ -1,10 +1,12 @@
 package com.pwmtp.charitable_foundation.service;
 
+import com.pwmtp.charitable_foundation.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 @Service
 public class MailSender {
@@ -26,5 +28,17 @@ public class MailSender {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         MAIL_SENDER.send(mailMessage);
+    }
+
+    public void sendActivationCode(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s!\n Welcome to CharitableFoundationWebsite! " +
+                            "\nTo activate your account, visit " + "http://localhost:8080/signup/activate/%s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+            send(user.getEmail(), "Activation code", message);
+        }
     }
 }
