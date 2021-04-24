@@ -4,6 +4,7 @@ import com.pwmtp.charitable_foundation.domain.ProductCategory;
 import com.pwmtp.charitable_foundation.domain.Product;
 import com.pwmtp.charitable_foundation.repository.ProductDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class ProductService {
         PRODUCT_DAO.save(product);
     }
 
+    public List<Product> getAll() {
+        return PRODUCT_DAO.findAllOrdered();
+    }
 
     public Product getByID(Long id) {
         return PRODUCT_DAO.findProductById(id);
