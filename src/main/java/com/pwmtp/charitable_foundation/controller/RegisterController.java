@@ -27,7 +27,7 @@ public class RegisterController {
             @RequestParam MultipartFile application,
             @RequestParam MultipartFile identity
     ) {
-        return USER_SERVICE.register(new User(username, email, password))
+        return USER_SERVICE.register(new User(username, email, password), application, identity)
                 ? new ResponseEntity<>("successful result", HttpStatus.OK)
                 : new ResponseEntity<>("this user is already registered", HttpStatus.BAD_REQUEST);
     }
