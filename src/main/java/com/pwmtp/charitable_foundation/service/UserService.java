@@ -44,17 +44,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
         USER_DAO.save(user);
-
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s!\n Welcome to CharitableFoundationWebsite! " +
-                            "\nTo activate your account, visit " + "http://localhost:8080/signup/activate/%s",
-                    user.getName(),
-                    user.getActivationCode()
-            );
-            MAIL_SENDER.send(user.getEmail(), "Activation code", message);
-        }
-
+        MAIL_SENDER.sendActivationCode(user);
         return true;
     }
 
@@ -65,7 +55,6 @@ public class UserService implements UserDetailsService {
         }
         user.setActivated(true);
         user.setActivationCode(null);
-        user.setPasswordConf(user.getPassword());
         update(user);
         return true;
     }
