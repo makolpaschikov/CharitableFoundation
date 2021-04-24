@@ -12,6 +12,7 @@ import {loadUser} from 'src/store/user'
 import {LoadingStatus} from 'src/util/loading-status'
 import {showErrorNotification} from 'src/store/notifications/actions'
 import {Notifications} from 'src/components/global/notifications/notifications'
+import {Registration} from 'src/pages/Registration/Registration'
 
 export const App = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -29,10 +30,14 @@ export const App = () => {
     return (
         <div className={clsx(NAVIGATION_PADDING, 'bg-white min-h-screen')}>
             <Navigation />
-            <div className={'container bg-background min-h-screen'}>
+            <div
+                className={
+                    'container bg-background min-h-screen overflow-hidden'
+                }
+            >
                 <Switch>
                     <Route exact path="/" component={Index} />
-                    <Route exact path="/" component={Index} />
+                    <Route exact path="/register" component={Registration} />
                 </Switch>
             </div>
             <Notifications />

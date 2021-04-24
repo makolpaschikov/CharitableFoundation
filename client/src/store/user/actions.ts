@@ -18,3 +18,5 @@ export const loadUser = createAsyncThunk<User, void, {rejectValue: string}>(
             )
     }
 )
+
+export const registerUser = async () => {}

@@ -1,5 +1,4 @@
 import {Test} from 'src/components/Test'
-import './Index.scss'
 
 export const Index = () => {
     return (
