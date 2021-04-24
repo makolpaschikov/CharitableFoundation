@@ -12,5 +12,6 @@ const formatEndpoints = <K extends string>(
 export const ENDPOINTS = formatEndpoints({
     currentUser: '/me',
     register: '/register',
+    login: '/login',
     log: '/log',
 })

@@ -28,16 +28,12 @@ export const Registration = () => {
             {application, identity, username, email, password},
             formik
         ) => {
-            if (!application || !identity) {
-                return dispatch(showErrorNotification('Файлы не загружены'))
-            }
-
             const body = new FormData()
             body.append('username', username)
             body.append('email', email)
             body.append('password', password)
-            body.append('application', application)
-            body.append('identity', identity)
+            body.append('application', application!)
+            body.append('identity', identity!)
 
             try {
                 await ky.post(ENDPOINTS.register, {body})

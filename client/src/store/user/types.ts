@@ -14,5 +14,5 @@ export type UserState =
       }
     | {
           status: LoadingStatus.SUCCESS
-          user: User
+          user: null | User
       }

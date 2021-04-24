@@ -23,7 +23,7 @@ const user = createSlice({
         )
         builder.addCase(
             loadUser.fulfilled,
-            (_, {payload: user}: PayloadAction<User>) => {
+            (_, {payload: user}: PayloadAction<User | null>) => {
                 return {status: LoadingStatus.SUCCESS, user}
             }
         )
