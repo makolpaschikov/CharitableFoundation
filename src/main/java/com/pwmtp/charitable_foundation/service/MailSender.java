@@ -21,24 +21,25 @@ public class MailSender {
         this.MAIL_SENDER = mailSender;
     }
 
-    public void send(String emailTo, String subject, String message) {
+    public void sendActivationCode(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Здравствуйте, %s!\n "
+                            + "Для активации Вашего аккаунта перейдите по ссылке "
+                            + "http://localhost:8080/api/activate/%s",
+                    user.getName(),
+                    user.getActivationCode()
+            );
+            send(user.getEmail(), "Activation code", message);
+        }
+    }
+
+    private void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(username);
         mailMessage.setTo(emailTo);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         MAIL_SENDER.send(mailMessage);
-    }
-
-    public void sendActivationCode(User user) {
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s!\n Welcome to CharitableFoundationWebsite! " +
-                            "\nTo activate your account, visit " + "http://localhost:8080/signup/activate/%s",
-                    user.getUsername(),
-                    user.getActivationCode()
-            );
-            send(user.getEmail(), "Activation code", message);
-        }
     }
 }

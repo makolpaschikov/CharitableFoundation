@@ -24,24 +24,27 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-    @NotBlank(message = "Name cannot be empty!")
-    private String username;
-
-    @NotBlank(message = "Email cannot be empty!")
-    @Email(message = "Incorrect email address")
-    private String email;
-
-    private String activationCode;
-
-    private boolean activate;
-
-    @NotBlank(message = "Password cannot be empty!")
-    @Length(min = 8, message = "Password length should have at least 8 chars!")
-    private String password;
-
     @NotBlank(message = "Number cannot be empty!")
     @Length(min = 11, max = 12, message = "Incorrect phone number!")
     private String number;
+
+    private String username;
+    private String email;
+    private String activationCode;
+    private boolean activate;
+    private String password;
+
+    /*---------- Constructors ----------*/
+
+    public User() {
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.number = "88005553535";
+    }
 
     /*---------- User details ----------*/
 
@@ -83,7 +86,6 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
 
     /*---------- Getters and setters ----------*/
 

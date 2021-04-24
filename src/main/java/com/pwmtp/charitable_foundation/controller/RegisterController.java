@@ -5,7 +5,6 @@ import com.pwmtp.charitable_foundation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
@@ -22,24 +21,21 @@ public class RegisterController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<String> register(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String email,
             @RequestParam MultipartFile application,
-            @RequestParam MultipartFile identity,
-            User user
+            @RequestParam MultipartFile identity
     ) {
-        USER_SERVICE.register(user);
-        return new ResponseEntity<>("result successful result", HttpStatus.OK);
+        return USER_SERVICE.register(new User(username, email, password))
+                ? new ResponseEntity<>("successful result", HttpStatus.OK)
+                : new ResponseEntity<>("this user is already registered", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/activate/{code}")
-    // TODO: rewrite
-    public Object activate(@PathVariable String code, Model model) {
-        boolean isActivated = USER_SERVICE.activateUser(code);
-        if(isActivated) {
-            model.addAttribute("message", "User successfully activated!");
-        } else {
-            model.addAttribute("message", "Activation code is not found!");
-        }
-        return new RedirectView("/login");
+    @GetMapping("/activate/{code}")
+    public Object activate(@PathVariable String code) {
+        USER_SERVICE.activateUser(code);
+        return new RedirectView("http://localhost:3000/login");
     }
 
 }
