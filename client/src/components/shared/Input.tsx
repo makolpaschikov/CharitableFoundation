@@ -1,11 +1,14 @@
 import clsx from 'clsx'
-import {ChangeEvent, FC, InputHTMLAttributes} from 'react'
+import {FC, InputHTMLAttributes} from 'react'
 
-type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+type InputProps = Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    'onChange' | 'value'
+> & {
     label: string
     disabled?: boolean
-    errorMessage?: string
-    onChange: (value: string, e: ChangeEvent<HTMLInputElement>) => unknown
+    errorMessage?: string | false
+    value?: string
 }
 
 export const Input: FC<InputProps> = ({
@@ -13,7 +16,6 @@ export const Input: FC<InputProps> = ({
     disabled,
     errorMessage,
     className,
-    onChange,
     ...inputProps
 }) => (
     <label className={clsx('block', className)}>
@@ -23,7 +25,6 @@ export const Input: FC<InputProps> = ({
                 'w-full border-1 border-gray-400 focus:border-primary reset-outline',
                 'rounded-lg px-6 py-4'
             )}
-            onChange={(e) => onChange(e.target.value, e)}
             {...inputProps}
         />
         {typeof errorMessage === 'string' && (
@@ -32,6 +33,11 @@ export const Input: FC<InputProps> = ({
     </label>
 )
 
-const ErrorMessage: FC<{children: string}> = ({children}) => (
-    <span className={'text-red-700'}>{children}</span>
+export const ErrorMessage: FC<{children: string; warning?: boolean}> = ({
+    children,
+    warning,
+}) => (
+    <span className={warning ? 'text-yellow-600' : 'text-red-700'}>
+        {children}
+    </span>
 )

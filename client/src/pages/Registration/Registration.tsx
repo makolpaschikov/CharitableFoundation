@@ -1,129 +1,168 @@
+import {useFormik} from 'formik'
 import ky from 'ky'
-import {FormEvent, useState} from 'react'
+import {FC, FormEvent, ReactNode} from 'react'
 import {useDispatch} from 'react-redux'
 import {FileInput} from 'src/components/shared/FileInput'
 import {Input} from 'src/components/shared/Input'
-import {AppDispatch} from 'src/store'
 import {
-    showErrorNotification,
-    showInfoNotification,
-} from 'src/store/notifications/actions'
+    RegistrationFormValues,
+    validateRegistration,
+} from 'src/pages/Registration/validate'
+import {AppDispatch} from 'src/store'
+import {showErrorNotification} from 'src/store/notifications/actions'
 import {ENDPOINTS} from 'src/util/api'
 
 export const Registration = () => {
     const dispatch = useDispatch<AppDispatch>()
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [application, setApplication] = useState<File | null>(null)
-    const [identity, setIdentity] = useState<File | null>(null)
+    const formik = useFormik<RegistrationFormValues>({
+        initialValues: {
+            username: '',
+            email: '',
+            password: '',
+            passwordRepeat: '',
+            application: null,
+            identity: null,
+        },
+        validate: validateRegistration,
+        onSubmit: async (
+            {application, identity, username, email, password},
+            formik
+        ) => {
+            if (!application || !identity) {
+                return dispatch(showErrorNotification('Файлы не загружены'))
+            }
 
-    const submit = async (e: FormEvent) => {
-        e.preventDefault()
+            const body = new FormData()
+            body.append('username', username)
+            body.append('email', email)
+            body.append('password', password)
+            body.append('application', application)
+            body.append('identity', identity)
 
-        if (!application || !identity) {
-            return dispatch(showErrorNotification('Файлы не загружены'))
-        }
-
-        const body = new FormData()
-        body.append('username', username)
-        body.append('email', email)
-        body.append('password', password)
-        body.append('application', application)
-        body.append('identity', identity)
-
-        try {
-            const response = await ky.post(ENDPOINTS.register, {body})
-            dispatch(
-                showInfoNotification(
-                    `Успешно: код ${
-                        response.status
-                    }, тело ${await response.text()}`
-                )
-            )
-        } catch (e) {
-            console.error(e)
-            if (e instanceof ky.HTTPError) {
-                try {
-                    const text = await e.response.text()
-                    dispatch(
-                        showErrorNotification(
-                            `Сервер вернул ошибку: код ${e.response.status}, тело ${text}`
+            try {
+                await ky.post(ENDPOINTS.register, {body})
+                formik.setStatus('done')
+            } catch (e) {
+                console.error(e)
+                if (e instanceof ky.HTTPError) {
+                    try {
+                        const text = await e.response.text()
+                        dispatch(
+                            showErrorNotification(
+                                `Сервер вернул ошибку: код ${e.response.status}, тело ${text}`
+                            )
                         )
-                    )
-                } catch (e) {
+                    } catch (e) {
+                        dispatch(
+                            showErrorNotification(
+                                `Сервер вернул ошибку: код ${e.response.status}`
+                            )
+                        )
+                    }
+                } else {
                     dispatch(
                         showErrorNotification(
-                            `Сервер вернул ошибку: код ${e.response.status}`
+                            `Произошла непонятная ошибка, подробности в консоли`
                         )
                     )
                 }
-            } else {
-                dispatch(
-                    showErrorNotification(
-                        `Произошла непонятная ошибка, подробности в консоли`
-                    )
-                )
             }
-        }
+        },
+    })
+
+    if (formik.status === 'done') {
+        return (
+            <FormContainer onSubmit={() => {}}>
+                <h1 className={'text-xl font-bold mb-4'}>
+                    Подтверждение электронной почты
+                </h1>
+                <p className={'mb-6'}>
+                    Для подтверждения электронной почты перейдите по ссылке в
+                    письме, которое было отправлено на указанный электронный
+                    адрес
+                </p>
+            </FormContainer>
+        )
     }
 
     return (
-        <div>
-            <form
-                onSubmit={submit}
-                className={
-                    'py-6 px-16 mx-12 mt-8 min-h-lg bg-white rounded-3xl shadow-lg'
-                }
-            >
-                <h1 className={'text-xl font-bold'}>Регистрация</h1>
-                <p className={'text-sm mb-4'}>
-                    Пожалуйста, заполните все поля ниже
-                </p>
+        <FormContainer onSubmit={formik.handleSubmit}>
+            <h1 className={'text-xl font-bold'}>Регистрация</h1>
+            <p className={'text-sm mb-4'}>
+                Пожалуйста, заполните все поля ниже
+            </p>
 
-                <Input
-                    className={'mb-6'}
-                    label={'Имя пользователя'}
-                    value={username}
-                    onChange={setUsername}
-                />
-                <Input
-                    className={'mb-6'}
-                    label={'Электронная почта'}
-                    value={email}
-                    onChange={setEmail}
-                />
-                <Input
-                    className={'mb-6'}
-                    label={'Пароль'}
-                    value={password}
-                    onChange={setPassword}
-                />
-                <FileInput
-                    className={'mb-6'}
-                    label={
-                        'Документ заявки (допустимые форматы: pdf, doc, docx)'
-                    }
-                    value={application}
-                    onChange={setApplication}
-                />
-                <FileInput
-                    className={'mb-8'}
-                    label={
-                        'Удостоверяющий документ организации (допустимые форматы: pdf, doc, docx)'
-                    }
-                    value={identity}
-                    onChange={setIdentity}
-                />
-                <button
-                    className={
-                        'bg-primary-light py-4 px-8 text-white rounded-lg'
-                    }
-                    type={'submit'}
-                >
-                    Зарегестрироваться
-                </button>
-            </form>
-        </div>
+            <Input
+                className={'mb-6'}
+                label={'Имя пользователя'}
+                errorMessage={formik.touched.username && formik.errors.username}
+                maxLength={40}
+                {...formik.getFieldProps('username')}
+            />
+            <Input
+                className={'mb-6'}
+                label={'Электронная почта'}
+                errorMessage={formik.touched.email && formik.errors.email}
+                maxLength={128}
+                {...formik.getFieldProps('email')}
+            />
+            <Input
+                type={'password'}
+                className={'mb-6'}
+                label={'Пароль'}
+                errorMessage={formik.touched.password && formik.errors.password}
+                maxLength={128}
+                {...formik.getFieldProps('password')}
+            />
+            <Input
+                type={'passwordRepeat'}
+                className={'mb-6'}
+                label={'Повторите пароль'}
+                errorMessage={
+                    formik.touched.passwordRepeat &&
+                    formik.errors.passwordRepeat
+                }
+                maxLength={128}
+                {...formik.getFieldProps('passwordRepeat')}
+            />
+            <FileInput
+                className={'mb-6'}
+                label={'Документ заявки (допустимые форматы: pdf, doc, docx)'}
+                errorMessage={
+                    formik.touched.application && formik.errors.application
+                }
+                {...formik.getFieldProps('application')}
+                onChange={(file) => formik.setFieldValue('application', file)}
+            />
+            <FileInput
+                className={'mb-8'}
+                label={
+                    'Удостоверяющий документ организации (допустимые форматы: pdf, doc, docx)'
+                }
+                errorMessage={formik.touched.identity && formik.errors.identity}
+                {...formik.getFieldProps('identity')}
+                onChange={(file) => formik.setFieldValue('identity', file)}
+            />
+            <button
+                className={'bg-primary-light py-4 px-8 text-white rounded-lg'}
+                type={'submit'}
+            >
+                Зарегестрироваться
+            </button>
+        </FormContainer>
     )
 }
+
+const FormContainer: FC<{
+    onSubmit: (e: FormEvent<HTMLFormElement>) => unknown
+    children: ReactNode
+}> = ({onSubmit, children}) => (
+    <div>
+        <form
+            onSubmit={onSubmit}
+            className={'py-6 px-16 mx-12 mt-8 bg-white rounded-3xl shadow-lg'}
+        >
+            {children}
+        </form>
+    </div>
+)

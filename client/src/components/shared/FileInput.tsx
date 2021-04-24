@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import {ChangeEvent, FC, InputHTMLAttributes} from 'react'
+import {ErrorMessage} from 'src/components/shared/Input'
 
 type FileInputProps = Omit<
     InputHTMLAttributes<HTMLInputElement>,
@@ -7,6 +8,7 @@ type FileInputProps = Omit<
 > & {
     label: string
     value?: File | null
+    errorMessage?: string | false
     onChange: (file: File) => unknown
 }
 
@@ -17,6 +19,7 @@ export const FileInput: FC<FileInputProps> = ({
     value,
     label,
     className,
+    errorMessage,
     ...inputProps
 }) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +27,6 @@ export const FileInput: FC<FileInputProps> = ({
             onChange(e.target.files[0])
         }
     }
-
-    console.log(value)
 
     return (
         <label className={clsx('block', className)}>
@@ -50,6 +51,9 @@ export const FileInput: FC<FileInputProps> = ({
                     {formatFilename(value)}
                 </div>
             </div>
+            {typeof errorMessage === 'string' && (
+                <ErrorMessage>{errorMessage}</ErrorMessage>
+            )}
         </label>
     )
 }
