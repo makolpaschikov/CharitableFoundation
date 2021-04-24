@@ -11,7 +11,7 @@ export const loadUser = createAsyncThunk<
     {rejectValue: string}
 >('users/loadUser', (_, {rejectWithValue, dispatch}) => {
     return ky
-        .get(ENDPOINTS.currentUser)
+        .get(ENDPOINTS.currentUser, {credentials: 'include'})
         .json<User>()
         .catch((e) => {
             if (e instanceof ky.HTTPError && e.response.status === 401) {

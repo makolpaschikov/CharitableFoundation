@@ -36,7 +36,10 @@ export const Registration = () => {
             body.append('identity', identity!)
 
             try {
-                await ky.post(ENDPOINTS.register, {body})
+                await ky.post(ENDPOINTS.register, {
+                    body,
+                    credentials: 'include',
+                })
                 formik.setStatus('done')
             } catch (e) {
                 console.error(e)

@@ -35,7 +35,7 @@ export const Login: FC = () => {
             body.append('password', password)
 
             try {
-                await ky.post(ENDPOINTS.login, {body})
+                await ky.post(ENDPOINTS.login, {body, credentials: 'include'})
             } catch (e) {
                 console.error(e)
                 if (e instanceof ky.HTTPError) {
