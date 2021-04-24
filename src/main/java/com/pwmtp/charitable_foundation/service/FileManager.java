@@ -9,7 +9,7 @@ import java.util.Locale;
 public class FileManager {
     
     enum FileType {
-        APPLICATON,
+        APPLICATION,
         IDENTITY
     }
     

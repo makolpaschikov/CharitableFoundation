@@ -32,7 +32,7 @@ public class RegisterController {
                 : new ResponseEntity<>("this user is already registered", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/activate/{code}", method = RequestMethod.POST)
+    @RequestMapping(value = "/activate/{code}", method = RequestMethod.GET)
     public Object activate(@PathVariable String code) {
         USER_SERVICE.activateUser(code);
         return new RedirectView("http://localhost:3000/login");

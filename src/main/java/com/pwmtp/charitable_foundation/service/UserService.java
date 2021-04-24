@@ -44,8 +44,8 @@ public class UserService implements UserDetailsService {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
         USER_DAO.save(user);
-        if (FileManager.saveFile(application, user.getId(), FileManager.FileType.APPLICATON) ||
-                FileManager.saveFile(identity, user.getId(), FileManager.FileType.IDENTITY)) return false;
+        if (!FileManager.saveFile(application, user.getId(), FileManager.FileType.APPLICATION) ||
+                !FileManager.saveFile(identity, user.getId(), FileManager.FileType.IDENTITY)) return false;
         MAIL_SENDER.sendActivationCode(user);
         return true;
     }
