@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private Set<UserRole> roles;
 
     @NotBlank(message = "Name cannot be empty!")
-    private String name;
+    private String username;
 
     @NotBlank(message = "Email cannot be empty!")
     @Email(message = "Incorrect email address")
@@ -38,10 +38,6 @@ public class User implements UserDetails {
     @NotBlank(message = "Password cannot be empty!")
     @Length(min = 8, message = "Password length should have at least 8 chars!")
     private String password;
-
-    @Transient
-    @NotBlank(message = "Password conformation cannot be empty!")
-    private String passwordConf;
 
     @NotBlank(message = "Number cannot be empty!")
     @Length(min = 11, max = 12, message = "Incorrect phone number!")
@@ -61,14 +57,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPasswordConf() {
-        return passwordConf;
-    }
-
-    public void setPasswordConf(String passwordConf) {
-        this.passwordConf = passwordConf;
     }
 
     @Override
@@ -104,11 +92,11 @@ public class User implements UserDetails {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
 
     public String getEmail() {
@@ -142,8 +130,6 @@ public class User implements UserDetails {
     public boolean isActivated() {
         return activate;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
             String message = String.format(
                     "Hello, %s!\n Welcome to CharitableFoundationWebsite! " +
                             "\nTo activate your account, visit " + "http://localhost:8080/signup/activate/%s",
-                    user.getName(),
+                    user.getUsername(),
                     user.getActivationCode()
             );
             MAIL_SENDER.send(user.getEmail(), "Activation code", message);
@@ -65,7 +65,6 @@ public class UserService implements UserDetailsService {
         }
         user.setActivated(true);
         user.setActivationCode(null);
-        user.setPasswordConf(user.getPassword());
         update(user);
         return true;
     }
