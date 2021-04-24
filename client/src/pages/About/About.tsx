@@ -1,4 +1,7 @@
-import img1 from 'src/img/about-1.jpg'
-import img2 from 'src/img/about-2.jpg'
-
-export const About = () => <div></div>
+export const About = () => (
+    <div className={'px-16 pt-8'}>
+        <h1 className={'text-lg font-bold mb-8'}>
+            Программа «Оборудование для больниц»
+        </h1>
+    </div>
+)
