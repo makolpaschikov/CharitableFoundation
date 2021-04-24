@@ -11,7 +11,7 @@ import {showErrorNotification} from 'src/store/notifications/actions'
 import {ENDPOINTS} from 'src/util/api'
 
 type LoginFormValues = {
-    login: string
+    username: string
     password: string
 }
 
@@ -19,19 +19,19 @@ export const Login: FC = () => {
     const dispatch = useDispatch<AppDispatch>()
     const formik = useFormik<LoginFormValues>({
         initialValues: {
-            login: '',
+            username: '',
             password: '',
         },
         validate: (values) => {
             const errors: Partial<Record<keyof LoginFormValues, string>> = {}
-            if (!values.login.trim())
-                errors.login = 'Введите имя пользователя или электронную почту'
+            if (!values.username.trim())
+                errors.username = 'Введите имя пользователя или электронную почту'
             if (!values.password) errors.password = 'Введите пароль'
             return errors
         },
-        onSubmit: async ({login, password}) => {
+        onSubmit: async ({username, password}) => {
             const body = new FormData()
-            body.append('login', login)
+            body.append('username', username)
             body.append('password', password)
 
             try {
@@ -83,8 +83,8 @@ export const Login: FC = () => {
                 <Input
                     label={'Имя пользователя или электронная почта'}
                     className={'mb-6'}
-                    errorMessage={formik.touched.login && formik.errors.login}
-                    {...formik.getFieldProps('login')}
+                    errorMessage={formik.touched.username && formik.errors.username}
+                    {...formik.getFieldProps('username')}
                 />
                 <Input
                     type={'password'}
