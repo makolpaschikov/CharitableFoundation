@@ -15,6 +15,6 @@ public class UserController {
     public ResponseEntity<Object> getUser(@AuthenticationPrincipal User user) {
         return user != null
                 ? new ResponseEntity<>(user, HttpStatus.OK)
-                : new ResponseEntity<>("user is not logged in", HttpStatus.BAD_REQUEST);
+                : new ResponseEntity<>("user is not logged in", HttpStatus.UNAUTHORIZED);
     }
 }

@@ -38,7 +38,8 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedHeaders("http://localhost:3000");
+                .allowedOriginPatterns("http://localhost:3000")
+                .allowCredentials(true);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
                     .loginPage("/api/login")
                     .permitAll()
                 .and()
-                    .logout().logoutSuccessUrl("/")
+                    .logout().logoutUrl("/api/logout").logoutSuccessUrl("/")
                     .permitAll();
     }
 
