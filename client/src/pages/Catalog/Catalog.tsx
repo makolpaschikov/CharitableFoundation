@@ -4,7 +4,7 @@ import {RetryLoading} from 'src/components/shared/RetryLoading'
 import {Spinner} from 'src/components/shared/Spinner'
 import {AppDispatch, AppState} from 'src/store'
 import {loadProducts} from 'src/store/products'
-import {CategoryName} from 'src/util/categories'
+import {Category, CategoryName} from 'src/util/categories'
 import {LoadingStatus} from 'src/util/loading-status'
 
 export const Catalog = () => {
@@ -37,17 +37,22 @@ export const Catalog = () => {
                 <div className={'px-32 pt-12'}>
                     <h1 className={'font-bold text-lg'}>Каталог вещей</h1>
                     <div className={'max-w-6xl'}>
-                        {products.categories.map((category) => (
+                        {Object.keys(products.categories).map((category) => (
                             <div>
-                                <div>{CategoryName[category.category]}</div>
+                                <h2 className={'text-lg font-bold'}>
+                                    {CategoryName[category as Category]}
+                                </h2>
                                 <div>
-                                    {category.products.map((product) => (
+                                    {products.categories[
+                                        category as Category
+                                    ].map((product) => (
                                         <div>
                                             <div>{product.name}</div>
                                             <div>{product.description}</div>
                                             <img
                                                 alt={product.name}
-                                                src={product.photos[0]}
+                                                // @ts-ignore
+                                                src={product.image}
                                             />
                                         </div>
                                     ))}

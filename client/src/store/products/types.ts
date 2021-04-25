@@ -7,10 +7,7 @@ export type Product = {
     photos: string[]
 }
 
-export type ProductCategory = {
-    category: Category
-    products: Product[]
-}
+export type CategoriesMap = Record<Category, Product[]>
 
 export type ProductState =
     | {
@@ -22,5 +19,5 @@ export type ProductState =
       }
     | {
           status: LoadingStatus.SUCCESS
-          categories: ProductCategory[]
+          categories: CategoriesMap
       }
