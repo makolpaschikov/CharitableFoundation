@@ -37,6 +37,7 @@ export const App = () => {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/profile" component={Profile} />
+                    <Route exact path="/contacts" component={Contacts} />
                     <Route exact path="/add-product" component={AddProduct} />
                 </Switch>
             </div>

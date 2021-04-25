@@ -10,7 +10,7 @@ import {TextArea} from 'src/components/shared/TextArea'
 import {AppDispatch} from 'src/store'
 import {showErrorNotification} from 'src/store/notifications/actions'
 import {ENDPOINTS} from 'src/util/api'
-import {Category} from 'src/util/categories'
+import {Category, CategoryName} from 'src/util/categories'
 
 type FormValues = {
     name: string
@@ -19,13 +19,10 @@ type FormValues = {
     photos: File[]
 }
 
-const OPTIONS = [
-    {label: '—', value: Category.NONE},
-    {label: 'Мебель', value: Category.INTERIOR},
-    {label: 'Техника', value: Category.TECHNICS},
-    {label: 'Лекарства', value: Category.MEDICINES},
-    {label: 'Другое', value: Category.OTHER},
-]
+const OPTIONS = Object.keys(Category).map((c) => ({
+    label: CategoryName[c as Category],
+    value: c,
+}))
 
 export const AddProduct: FC = () => {
     const dispatch = useDispatch<AppDispatch>()
