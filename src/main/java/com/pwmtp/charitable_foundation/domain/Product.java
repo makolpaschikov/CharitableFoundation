@@ -1,7 +1,6 @@
 package com.pwmtp.charitable_foundation.domain;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -64,5 +63,9 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImage() {
+        return image;
     }
 }
