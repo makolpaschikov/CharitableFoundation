@@ -25,12 +25,11 @@ public class ProductService {
     }
 
     public boolean addProduct(User user, List<MultipartFile> images, Product product) {
-        PRODUCT_DAO.save(product);
+        product = PRODUCT_DAO.save(product);
         for (MultipartFile image : images) {
-            if (!FileManager.saveImage(image, user.getId(), product.getId())) {
-                return false;
-            }
+            if (!FileManager.saveImage(image, user.getId(), product)) return false;
         }
+        update(product);
         return true;
     }
 
@@ -38,16 +37,8 @@ public class ProductService {
         return PRODUCT_DAO.findAllOrdered();
     }
 
-    public Product getByID(Long id) {
-        return PRODUCT_DAO.findProductById(id);
-    }
-
     public List<Product> getByUserID(Long id) {
         return PRODUCT_DAO.findProductByUserID(id);
-    }
-
-    public Product getByName(String name) {
-        return PRODUCT_DAO.findProductByName(name);
     }
 
     public List<Product> getByCategory(ProductCategory category) {

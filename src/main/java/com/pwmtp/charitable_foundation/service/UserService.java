@@ -41,11 +41,12 @@ public class UserService implements UserDetailsService {
     public boolean register(User user, MultipartFile application, MultipartFile identity) {
         if (getByEmail(user.getEmail()) != null) return false;
 
+        user.setApplicationFile(FileManager.saveFile(application, user, FileManager.FileType.APPLICATION));
+        user.setIdentityFile(FileManager.saveFile(identity, user, FileManager.FileType.IDENTITY));
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
         USER_DAO.save(user);
-        if (!FileManager.saveFile(application, user.getId(), FileManager.FileType.APPLICATION) ||
-                !FileManager.saveFile(identity, user.getId(), FileManager.FileType.IDENTITY)) return false;
+
         MAIL_SENDER.sendActivationCode(user);
         return true;
     }
@@ -94,7 +95,5 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return getByEmail(email);
     }
-
-    /*---------- Private ----------*/
 
 }

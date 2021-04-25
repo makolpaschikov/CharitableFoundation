@@ -5,9 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -28,6 +28,9 @@ public class User implements UserDetails {
     @Length(min = 11, max = 12, message = "Incorrect phone number!")
     private String number;
 
+    private String applicationFile;
+    private String identityFile;
+
     private String username;
     private String email;
     private String activationCode;
@@ -44,6 +47,7 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.number = "88005553535";
+        this.roles = Collections.singleton(UserRole.DISTRIBUTOR);
     }
 
     /*---------- User details ----------*/
@@ -131,6 +135,22 @@ public class User implements UserDetails {
 
     public boolean isActivated() {
         return activate;
+    }
+
+    public String getApplicationFile() {
+        return applicationFile;
+    }
+
+    public String getIdentityFile() {
+        return identityFile;
+    }
+
+    public void setApplicationFile(String applicationFile) {
+        this.applicationFile = applicationFile;
+    }
+
+    public void setIdentityFile(String identityFile) {
+        this.identityFile = identityFile;
     }
 
     @Override

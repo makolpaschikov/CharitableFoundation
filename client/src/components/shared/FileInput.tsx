@@ -64,7 +64,7 @@ const formatFilename = (file?: File[] | File | null) => {
     if (!file) return null
     if (!Array.isArray(file)) file = [file]
     return file.map((file, i) => {
-        if (!file || file.name.length <= MAX_FILENAME_LENGTH) return file
+        if (!file || file.name.length <= MAX_FILENAME_LENGTH) return file.name
 
         const {name} = file
         const half = Math.min(name.length / 2 - 4, MAX_FILENAME_LENGTH / 2)
