@@ -109,7 +109,7 @@ export const AddProduct: FC = () => {
                 label={'Название'}
                 errorMessage={formik.touched.name && formik.errors.name}
                 maxLength={128}
-                {...formik.getFieldProps('passwordRepeat')}
+                {...formik.getFieldProps('name')}
             />
             <TextArea
                 className={'mb-6'}
