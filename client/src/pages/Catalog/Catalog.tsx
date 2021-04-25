@@ -41,7 +41,7 @@ export const Catalog = () => {
 }
 
 const Display: FC<{categories: CategoriesMap}> = ({categories}) => {
-    const [category, setCategory] = useState(Category.NONE)
+    const [ctgry, setCategory] = useState(Category.NONE)
 
     return (
         <div className={'px-32 pt-12'}>
@@ -49,7 +49,7 @@ const Display: FC<{categories: CategoriesMap}> = ({categories}) => {
             <div>
                 Категория:
                 <select
-                    value={category}
+                    value={ctgry}
                     onChange={(e) => setCategory(e.target.value as Category)}
                     className={'inline-block ml-2'}
                 >
@@ -61,7 +61,8 @@ const Display: FC<{categories: CategoriesMap}> = ({categories}) => {
             <div className={'max-w-6xl flex flex-wrap'}>
                 {(Object.keys(categories) as Category[])
                     .map((category) =>
-                        categories[category].length === 0
+                        categories[category].length === 0 ||
+                        (ctgry !== Category.NONE && ctgry !== category)
                             ? []
                             : categories[category].map((product) => (
                                   <div
