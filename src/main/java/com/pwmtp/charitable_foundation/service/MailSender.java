@@ -15,10 +15,13 @@ public class MailSender {
     private String username;
 
     private final JavaMailSender MAIL_SENDER;
+    private final UserService USER_SERVICE;
+
 
     @Autowired
-    public MailSender(JavaMailSender mailSender) {
+    public MailSender(JavaMailSender mailSender, UserService userService) {
         this.MAIL_SENDER = mailSender;
+        this.USER_SERVICE = userService;
     }
 
     public void sendActivationCode(User user) {
@@ -32,6 +35,20 @@ public class MailSender {
             );
             send(user.getEmail(), "Activation code", message);
         }
+    }
+
+    public void sendAsk(Long id, String emailFrom, String productName) {
+        UserService userService;
+        String message = String.format(
+                "Здравствуйте, %s!\n "
+                    + "Ваше объявление о пожертвовании \"%s\" заинтересовало медицинское учреждение.\n"
+                    + "Можете связаться с ним по почте %s",
+                    USER_SERVICE.getByID(id).getName(),
+                    productName,
+                    emailFrom
+        );
+
+        send(USER_SERVICE.getByID(id).getEmail(), "Запрос на подтверждение пожертвования", message);
     }
 
     private void send(String emailTo, String subject, String message) {
