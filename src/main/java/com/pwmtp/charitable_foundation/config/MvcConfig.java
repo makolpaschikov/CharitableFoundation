@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -32,6 +33,29 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("http://localhost:3000")
+                .allowCredentials(true);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                    .mvcMatchers("/**", "/signup/activate/*").permitAll()
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin()
+                    .loginPage("/api/login")
+                    .permitAll()
+                .and()
+                    .logout().logoutUrl("/api/logout").logoutSuccessUrl("/")
+                    .permitAll();
     }
 
     @Override
@@ -60,22 +84,5 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         registry
                 .addResourceHandler("/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/client/build/index.html");
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                    .mvcMatchers("/**", "/signup/activate/*").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/router")
-                    .permitAll()
-                .and()
-                    .logout().logoutSuccessUrl("/")
-                    .permitAll();
     }
 }

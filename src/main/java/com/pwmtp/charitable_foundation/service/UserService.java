@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -38,36 +38,26 @@ public class UserService implements UserDetailsService {
         USER_DAO.save(user);
     }
 
-    public boolean register(User user) {
+    public boolean register(User user, MultipartFile application, MultipartFile identity) {
         if (getByEmail(user.getEmail()) != null) return false;
 
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
         USER_DAO.save(user);
-
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s!\n Welcome to CharitableFoundationWebsite! " +
-                            "\nTo activate your account, visit " + "http://localhost:8080/signup/activate/%s",
-                    user.getName(),
-                    user.getActivationCode()
-            );
-            MAIL_SENDER.send(user.getEmail(), "Activation code", message);
-        }
-
+        if (!FileManager.saveFile(application, user.getId(), FileManager.FileType.APPLICATION) ||
+                !FileManager.saveFile(identity, user.getId(), FileManager.FileType.IDENTITY)) return false;
+        MAIL_SENDER.sendActivationCode(user);
         return true;
     }
 
-    public boolean activateUser(String code) {
+    public void activateUser(String code) {
         User user = USER_DAO.findUserByActivationCode(code);
         if(user == null) {
-            return false;
+            return;
         }
         user.setActivated(true);
         user.setActivationCode(null);
-        user.setPasswordConf(user.getPassword());
         update(user);
-        return true;
     }
 
     /*---------- Get ----------*/

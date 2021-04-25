@@ -18,6 +18,17 @@ public class Product {
     private String name;
     private String description;
 
+    /*---------- Constructors ----------*/
+
+    public Product() {
+    }
+
+    public Product(String name, String description, ProductCategory category, Long userID) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.userID = userID;
+    }
 
     /*---------- Getters and setters ----------*/
 
