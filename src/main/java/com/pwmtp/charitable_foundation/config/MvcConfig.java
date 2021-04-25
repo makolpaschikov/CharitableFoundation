@@ -61,10 +61,10 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/api/images/**")
+                .addResourceHandler("/resources/images/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/resources/images/");
         registry
-                .addResourceHandler("/api/files/**")
+                .addResourceHandler("/resources/files/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/resources/files/");
 
         registry
