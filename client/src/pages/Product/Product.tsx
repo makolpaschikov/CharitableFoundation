@@ -99,6 +99,7 @@ const GetContact: FC<{product: TProduct}> = ({product}) => {
                 })
                 .json<{email: string; name: string}>()
             setData(result)
+            setStatus(LoadingStatus.SUCCESS)
         } catch (e) {
             setStatus(LoadingStatus.ERROR)
         }
