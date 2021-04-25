@@ -66,7 +66,7 @@ const View: FC<{product: TProduct}> = ({product}) => {
                     }
                 >
                     <img
-                        className={'w-max-full h-max-full'}
+                        className={'max-w-full max-h-full'}
                         alt={product.name}
                         // @ts-ignore
                         src={product.image}
