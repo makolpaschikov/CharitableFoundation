@@ -45,7 +45,9 @@ export const FileInput: FC<FileInputProps> = ({
                         'hover:bg-gray-100 active:bg-gray-200 duration-75 flex-shrink-0 mr-2'
                     )}
                 >
-                    {value ? 'Изменить файл' : 'Выберите файл'}
+                    {(Array.isArray(value) ? value.length > 0 : value)
+                        ? 'Изменить файл'
+                        : 'Выберите файл'}
                 </div>
                 <div className={'inline-block max-w-xs py-1'}>
                     {formatFilename(value)}

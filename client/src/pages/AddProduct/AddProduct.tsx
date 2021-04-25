@@ -5,6 +5,8 @@ import {useDispatch} from 'react-redux'
 import {FileInput} from 'src/components/shared/FileInput'
 import {FormContainer} from 'src/components/shared/FormConatiner'
 import {Input} from 'src/components/shared/Input'
+import {Select} from 'src/components/shared/Select'
+import {TextArea} from 'src/components/shared/TextArea'
 import {AppDispatch} from 'src/store'
 import {showErrorNotification} from 'src/store/notifications/actions'
 import {ENDPOINTS} from 'src/util/api'
@@ -16,6 +18,14 @@ type FormValues = {
     category: string
     photos: File[]
 }
+
+const OPTIONS = [
+    {label: '—', value: Category.NONE},
+    {label: 'Мебель', value: Category.INTERIOR},
+    {label: 'Техника', value: Category.TECHNICS},
+    {label: 'Лекарства', value: Category.MEDICINES},
+    {label: 'Другое', value: Category.OTHER},
+]
 
 export const AddProduct: FC = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -93,13 +103,29 @@ export const AddProduct: FC = () => {
 
     return (
         <FormContainer onSubmit={formik.handleSubmit}>
+            <h1 className={'mb-6 font-bold text-lg'}>Добавить товар</h1>
             <Input
-                type={'name'}
                 className={'mb-6'}
                 label={'Название'}
                 errorMessage={formik.touched.name && formik.errors.name}
                 maxLength={128}
                 {...formik.getFieldProps('passwordRepeat')}
+            />
+            <TextArea
+                className={'mb-6'}
+                label={'Описание'}
+                errorMessage={
+                    formik.touched.description && formik.errors.description
+                }
+                maxLength={4096}
+                {...formik.getFieldProps('description')}
+            />
+            <Select
+                className={'mb-6'}
+                label={'Категория'}
+                options={OPTIONS}
+                errorMessage={formik.touched.category && formik.errors.category}
+                {...formik.getFieldProps('category')}
             />
             <FileInput
                 multiple
@@ -113,6 +139,12 @@ export const AddProduct: FC = () => {
                     formik.setFieldValue('photos', Array.from(files))
                 }
             />
+            <button
+                className={'bg-primary-light py-4 px-8 text-white rounded-lg'}
+                type={'submit'}
+            >
+                Добавить
+            </button>
         </FormContainer>
     )
 }

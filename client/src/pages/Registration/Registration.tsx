@@ -114,7 +114,7 @@ export const Registration = () => {
                 {...formik.getFieldProps('password')}
             />
             <Input
-                type={'passwordRepeat'}
+                type={'password'}
                 className={'mb-6'}
                 label={'Повторите пароль'}
                 errorMessage={

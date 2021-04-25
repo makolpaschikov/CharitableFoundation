@@ -1,7 +1,8 @@
 export enum Category {
     NONE = 'none',
 
-    FURNITURE = 'furniture',
-    MEDICINE = 'medicine',
-    OTHER = 'other',
+    INTERIOR = 'INTERIOR',
+    MEDICINES = 'MEDICINES',
+    TECHNICS = 'TECHNICS',
+    OTHER = 'OTHER',
 }
