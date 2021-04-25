@@ -3,12 +3,14 @@ import ky from 'ky'
 import {ENDPOINTS} from 'src/util/api'
 import {getMessageFromApiError} from 'src/util/api-error'
 import {CategoriesMap} from 'src/store/products/types'
+import {AppDispatch} from 'src/store'
 
 export const loadProducts = createAsyncThunk<
     {categories: CategoriesMap; my?: boolean},
     boolean | undefined,
-    {rejectValue: {msg: string; my?: boolean}}
->('products/loadProducts', (my, {rejectWithValue}) => {
+    {rejectValue: {msg: string; my?: boolean}; dispatch: AppDispatch}
+>('products/loadProducts', (my, {rejectWithValue, dispatch}) => {
+    dispatch({type: 'products/startLoading', payload: my})
     return ky
         .get(my ? ENDPOINTS.getMyProducts : ENDPOINTS.getProducts, {
             credentials: 'include',
