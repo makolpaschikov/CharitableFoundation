@@ -2,14 +2,15 @@ import {configureStore} from '@reduxjs/toolkit'
 import {userReducer} from 'src/store/user'
 import logger from 'redux-logger'
 import {notificationsReducer} from 'src/store/notifications/reducer'
-import {productsReducer} from 'src/store/products'
+import {getProductsReducer} from 'src/store/products'
 
 export function createStore() {
     return configureStore({
         reducer: {
             user: userReducer,
             notifications: notificationsReducer,
-            products: productsReducer,
+            products: getProductsReducer(),
+            myProducts: getProductsReducer(true),
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(logger),

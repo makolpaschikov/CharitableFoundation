@@ -25,7 +25,8 @@ export const Login: FC = () => {
         validate: (values) => {
             const errors: Partial<Record<keyof LoginFormValues, string>> = {}
             if (!values.username.trim())
-                errors.username = 'Введите имя пользователя или электронную почту'
+                errors.username =
+                    'Введите имя пользователя или электронную почту'
             if (!values.password) errors.password = 'Введите пароль'
             return errors
         },
@@ -36,6 +37,7 @@ export const Login: FC = () => {
 
             try {
                 await ky.post(ENDPOINTS.login, {body, credentials: 'include'})
+                window.location.href = '/profile'
             } catch (e) {
                 console.error(e)
                 if (e instanceof ky.HTTPError) {
@@ -83,7 +85,9 @@ export const Login: FC = () => {
                 <Input
                     label={'Имя пользователя или электронная почта'}
                     className={'mb-6'}
-                    errorMessage={formik.touched.username && formik.errors.username}
+                    errorMessage={
+                        formik.touched.username && formik.errors.username
+                    }
                     {...formik.getFieldProps('username')}
                 />
                 <Input

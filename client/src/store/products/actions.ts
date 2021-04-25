@@ -5,18 +5,21 @@ import {getMessageFromApiError} from 'src/util/api-error'
 import {CategoriesMap} from 'src/store/products/types'
 
 export const loadProducts = createAsyncThunk<
-    CategoriesMap,
-    void,
-    {rejectValue: string}
->('products/loadProducts', (_, {rejectWithValue, dispatch}) => {
+    {categories: CategoriesMap; my?: boolean},
+    boolean | undefined,
+    {rejectValue: {msg: string; my?: boolean}}
+>('products/loadProducts', (my, {rejectWithValue}) => {
     return ky
-        .get(ENDPOINTS.getProducts, {credentials: 'include'})
+        .get(my ? ENDPOINTS.getMyProducts : ENDPOINTS.getProducts, {
+            credentials: 'include',
+        })
         .json<CategoriesMap>()
+        .then((categories) => ({categories, my}))
         .catch((e) => {
             return getMessageFromApiError(
                 e,
                 'не удалось загрузить каталог'
-            ).then(rejectWithValue)
+            ).then((msg) => rejectWithValue({msg, my}))
         })
 })
 

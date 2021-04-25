@@ -16,6 +16,7 @@ import {Profile} from 'src/pages/Profile'
 import {Contacts} from 'src/pages/Contacts'
 import {AddProduct} from 'src/pages/AddProduct'
 import {Catalog} from 'src/pages/Catalog'
+import {Product} from 'src/pages/Product'
 
 export const App = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -41,6 +42,11 @@ export const App = () => {
                     <Route exact path="/profile" component={Profile} />
                     <Route exact path="/contacts" component={Contacts} />
                     <Route exact path="/add-product" component={AddProduct} />
+                    <Route
+                        exact
+                        path="/product/:category/:id"
+                        component={Product}
+                    />
                 </Switch>
             </div>
             <Notifications />

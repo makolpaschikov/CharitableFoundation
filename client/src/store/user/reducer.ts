@@ -6,7 +6,9 @@ import {LoadingStatus} from 'src/util/loading-status'
 const user = createSlice({
     name: 'user',
     initialState: {status: LoadingStatus.NONE} as UserState,
-    reducers: {},
+    reducers: {
+        logout: (): UserState => ({status: LoadingStatus.SUCCESS, user: null}),
+    },
     extraReducers: (builder) => {
         builder.addCase(loadUser.pending, (state) => {
             if (state.status === LoadingStatus.ERROR) {
@@ -31,3 +33,4 @@ const user = createSlice({
 })
 
 export const userReducer = user.reducer
+export const {logout} = user.actions

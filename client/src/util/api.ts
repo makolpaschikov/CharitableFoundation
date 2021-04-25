@@ -16,6 +16,7 @@ export const ENDPOINTS = formatEndpoints({
     getMyProducts: '/my-products',
     removeProduct: '/remove-product',
     register: '/register',
+    logout: '/logout',
     login: '/login',
     log: '/log',
 })

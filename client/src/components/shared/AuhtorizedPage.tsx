@@ -11,6 +11,7 @@ export const authorized = (Component: ComponentType) => {
     return () => {
         const dispatch = useDispatch<AppDispatch>()
         const user = useSelector((state: AppState) => state.user)
+        console.log('AAAAA', user)
 
         switch (user.status) {
             case LoadingStatus.NONE:
@@ -28,7 +29,7 @@ export const authorized = (Component: ComponentType) => {
                     />
                 )
             case LoadingStatus.SUCCESS: {
-                if (user) {
+                if (user.user) {
                     return <Component />
                 } else {
                     return <Redirect to={'/login'} />

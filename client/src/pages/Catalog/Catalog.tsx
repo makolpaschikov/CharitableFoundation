@@ -10,15 +10,17 @@ import {LoadingStatus} from 'src/util/loading-status'
 import LinesEllipsis from 'react-ellipsis-pjs'
 import {Link} from 'react-router-dom'
 
-export const Catalog = () => {
+export const Catalog: FC<{my?: boolean}> = ({my}) => {
     const dispatch = useDispatch<AppDispatch>()
-    const products = useSelector((state: AppState) => state.products)
+    const products = useSelector((state: AppState) =>
+        my ? state.myProducts : state.products
+    )
 
     useEffect(() => {
         if (products.status === LoadingStatus.NONE) {
-            dispatch(loadProducts())
+            dispatch(loadProducts(my))
         }
-    }, [dispatch, products.status])
+    }, [dispatch, products.status, my])
 
     switch (products.status) {
         case LoadingStatus.NONE:
@@ -73,7 +75,7 @@ const Display: FC<{categories: CategoriesMap}> = ({categories}) => {
                                   >
                                       <div
                                           className={
-                                              'bg-gray-200 flex items-center w-48 h-32 mb-2'
+                                              'bg-gray-200 flex items-center justify-center w-48 h-32 mb-2'
                                           }
                                       >
                                           <img
