@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductService {
@@ -32,12 +34,12 @@ public class ProductService {
         return true;
     }
 
-    public List<Product> getAll() {
-        List<Product> products = new ArrayList<>();
-        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.MEDICINES));
-        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.TECHNICS));
-        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.INTERIOR));
-        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.OTHER));
+    public Map<ProductCategory, List<Product>> getAll() {
+        Map<ProductCategory, List<Product>> products = new HashMap<>();
+        products.put(ProductCategory.MEDICINES, PRODUCT_DAO.findProductByCategory(ProductCategory.MEDICINES));
+        products.put(ProductCategory.TECHNICS, PRODUCT_DAO.findProductByCategory(ProductCategory.TECHNICS));
+        products.put(ProductCategory.INTERIOR, PRODUCT_DAO.findProductByCategory(ProductCategory.INTERIOR));
+        products.put(ProductCategory.OTHER, PRODUCT_DAO.findProductByCategory(ProductCategory.OTHER));
         return products;
     }
 

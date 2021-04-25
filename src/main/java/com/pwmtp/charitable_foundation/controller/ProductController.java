@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -40,7 +41,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public @ResponseBody ResponseEntity<List<Product>> getProducts() {
+    public @ResponseBody ResponseEntity<Map<ProductCategory, List<Product>>> getProducts() {
         return new ResponseEntity<>(PRODUCT_SERVICE.getAll(), HttpStatus.OK);
     }
 
