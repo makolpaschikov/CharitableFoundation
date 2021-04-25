@@ -74,7 +74,10 @@ export const Contacts: FC = () => (
     </div>
 )
 
-const Contact: FC<{label: string; value: ReactNode}> = ({label, value}) => (
+export const Contact: FC<{label: string; value: ReactNode}> = ({
+    label,
+    value,
+}) => (
     <div className={'mb-2 flex '}>
         <div className={'w-32 text-sm font-bold'}>{label}:</div>
         <div className={'flex-1'}>{value}</div>
