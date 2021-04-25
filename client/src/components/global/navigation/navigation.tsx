@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 export const NAVIGATION_PADDING = 'pt-16'
 const NAVIGATION_ITEMS: {label: string; target: string}[] = [
     {label: 'Каталог товаров', target: '/catalog'},
-    {label: 'О фонде', target: '/about'},
+    {label: 'О программе', target: '/about-program'},
     {label: 'Контакты', target: '/contacts'},
     {label: 'Личный кабинет', target: '/profile'},
 ]

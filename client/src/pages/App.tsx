@@ -13,6 +13,8 @@ import {Notifications} from 'src/components/global/notifications/notifications'
 import {Registration} from 'src/pages/Registration'
 import {Login} from 'src/pages/Login'
 import {Profile} from 'src/pages/Profile'
+import {Contacts} from 'src/pages/Contacts'
+import {AddProduct} from 'src/pages/AddProduct'
 
 export const App = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -31,9 +33,11 @@ export const App = () => {
             >
                 <Switch>
                     <Route exact path="/" component={Index} />
+                    <Route exact path="/about" component={Contacts} />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/profile" component={Profile} />
+                    <Route exact path="/add-product" component={AddProduct} />
                 </Switch>
             </div>
             <Notifications />
