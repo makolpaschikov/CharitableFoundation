@@ -68,7 +68,7 @@ export const AddProduct: FC = () => {
             photos.forEach((photo) => body.append('photos', photo))
 
             try {
-                await ky.put(ENDPOINTS.register, {
+                await ky.put(ENDPOINTS.addProduct, {
                     body,
                     credentials: 'include',
                 })
@@ -130,7 +130,7 @@ export const AddProduct: FC = () => {
             <FileInput
                 multiple
                 className={'mb-6'}
-                label={'Документ заявки (допустимые форматы: pdf, doc, docx)'}
+                label={'Фотографии'}
                 errorMessage={
                     formik.touched.photos && (formik.errors.photos as string)
                 }
