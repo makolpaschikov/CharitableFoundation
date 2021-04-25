@@ -41,8 +41,8 @@ public class UserService implements UserDetailsService {
     public boolean register(User user, MultipartFile application, MultipartFile identity) {
         if (getByEmail(user.getEmail()) != null) return false;
 
-        user.setApplicationFile(FileManager.saveFile(application, user, FileManager.FileType.APPLICATION));
-        user.setIdentityFile(FileManager.saveFile(identity, user, FileManager.FileType.IDENTITY));
+        user.setApplicationFile(FileManager.saveFile(application, user.getEmail(), FileManager.FileType.APPLICATION));
+        user.setIdentityFile(FileManager.saveFile(identity, user.getEmail(), FileManager.FileType.IDENTITY));
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setActivationCode(UUID.randomUUID().toString());
         USER_DAO.save(user);

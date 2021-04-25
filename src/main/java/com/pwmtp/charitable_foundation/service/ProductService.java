@@ -12,12 +12,13 @@ import java.util.List;
 
 @Service
 public class ProductService {
-
     private final ProductDAO PRODUCT_DAO;
+    private final UserService USER_SERVICE;
 
     @Autowired
-    public ProductService(ProductDAO productDAO) {
+    public ProductService(ProductDAO productDAO, UserService userService) {
         this.PRODUCT_DAO = productDAO;
+        this.USER_SERVICE = userService;
     }
 
     public void update(Product product) {
@@ -25,11 +26,8 @@ public class ProductService {
     }
 
     public boolean addProduct(User user, List<MultipartFile> images, Product product) {
-        product = PRODUCT_DAO.save(product);
-        for (MultipartFile image : images) {
-            if (!FileManager.saveImage(image, user.getId(), product)) return false;
-        }
-        update(product);
+        product.setImage(FileManager.saveImage(images.get(0), user.getEmail(), product.getName()));
+        PRODUCT_DAO.save(product);
         return true;
     }
 
@@ -47,7 +45,7 @@ public class ProductService {
 
     public boolean deleteByID(Long userID, Long productID) {
         PRODUCT_DAO.deleteById(productID);
-        return FileManager.deleteProductImages(userID, productID);
+        return FileManager.deleteProductImages(USER_SERVICE.getByID(userID).getEmail(), productID);
     }
 
 }

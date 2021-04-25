@@ -4,7 +4,6 @@ import com.pwmtp.charitable_foundation.domain.Product;
 import com.pwmtp.charitable_foundation.domain.ProductCategory;
 import com.pwmtp.charitable_foundation.domain.User;
 import com.pwmtp.charitable_foundation.service.ProductService;
-import com.pwmtp.charitable_foundation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +34,9 @@ public class ProductController {
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam String category,
-            @RequestParam List<MultipartFile> images
+            @RequestParam List<MultipartFile> photos
     ) {
-        return PRODUCT_SERVICE.addProduct(user, images,
+        return PRODUCT_SERVICE.addProduct(user, photos,
                 new Product(name, description, ProductCategory.valueOf(category), user.getId()))
                 ? new ResponseEntity<>("the product has been saved", HttpStatus.OK)
                 : new ResponseEntity<>("the product could not be saved", HttpStatus.INTERNAL_SERVER_ERROR);

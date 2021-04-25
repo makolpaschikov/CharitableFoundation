@@ -18,10 +18,7 @@ public class Product {
     private Long userID;
     private String name;
     private String description;
-
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "img_url", joinColumns = @JoinColumn(name = "product_id"))
-    private List<String> images;
+    private String image;
 
     /*---------- Constructors ----------*/
 
@@ -65,11 +62,7 @@ public class Product {
         this.userID = userID;
     }
 
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
+    public void setImage(String image) {
+        this.image = image;
     }
 }
