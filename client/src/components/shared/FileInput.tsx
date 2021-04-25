@@ -7,9 +7,9 @@ type FileInputProps = Omit<
     'type' | 'onChange' | 'value'
 > & {
     label: string
-    value?: File | null
+    value?: File[] | File | null
     errorMessage?: string | false
-    onChange: (file: File) => unknown
+    onChange: (files: FileList) => unknown
 }
 
 const MAX_FILENAME_LENGTH = 28
@@ -23,8 +23,8 @@ export const FileInput: FC<FileInputProps> = ({
     ...inputProps
 }) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            onChange(e.target.files[0])
+        if (e.target.files) {
+            onChange(e.target.files)
         }
     }
 
@@ -58,10 +58,16 @@ export const FileInput: FC<FileInputProps> = ({
     )
 }
 
-const formatFilename = (file?: File | null) => {
-    if (!file || file.name.length <= MAX_FILENAME_LENGTH) return file
+const formatFilename = (file?: File[] | File | null) => {
+    if (!file) return null
+    if (!Array.isArray(file)) file = [file]
+    return file.map((file, i) => {
+        if (!file || file.name.length <= MAX_FILENAME_LENGTH) return file
 
-    const {name} = file
-    const half = Math.min(name.length / 2 - 4, MAX_FILENAME_LENGTH / 2)
-    return name.slice(0, half) + '...' + name.slice(-half)
+        const {name} = file
+        const half = Math.min(name.length / 2 - 4, MAX_FILENAME_LENGTH / 2)
+        return (
+            <div key={i}>{name.slice(0, half) + '...' + name.slice(-half)}</div>
+        )
+    })
 }

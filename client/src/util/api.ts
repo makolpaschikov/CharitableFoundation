@@ -11,6 +11,10 @@ const formatEndpoints = <K extends string>(
 
 export const ENDPOINTS = formatEndpoints({
     currentUser: '/me',
+    addProduct: '/add-product',
+    getProducts: '/products',
+    getMyProducts: '/my-products',
+    removeProduct: '/remove-product',
     register: '/register',
     login: '/login',
     log: '/log',

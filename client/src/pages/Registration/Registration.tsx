@@ -1,8 +1,8 @@
 import {useFormik} from 'formik'
 import ky from 'ky'
-import {FC, FormEvent, ReactNode} from 'react'
 import {useDispatch} from 'react-redux'
 import {FileInput} from 'src/components/shared/FileInput'
+import {FormContainer} from 'src/components/shared/FormConatiner'
 import {Input} from 'src/components/shared/Input'
 import {
     RegistrationFormValues,
@@ -131,7 +131,9 @@ export const Registration = () => {
                     formik.touched.application && formik.errors.application
                 }
                 {...formik.getFieldProps('application')}
-                onChange={(file) => formik.setFieldValue('application', file)}
+                onChange={(files) =>
+                    files[0] && formik.setFieldValue('application', files[0])
+                }
             />
             <FileInput
                 className={'mb-8'}
@@ -140,7 +142,9 @@ export const Registration = () => {
                 }
                 errorMessage={formik.touched.identity && formik.errors.identity}
                 {...formik.getFieldProps('identity')}
-                onChange={(file) => formik.setFieldValue('identity', file)}
+                onChange={(files) =>
+                    files[0] && formik.setFieldValue('identity', files[0])
+                }
             />
             <button
                 className={'bg-primary-light py-4 px-8 text-white rounded-lg'}
@@ -151,17 +155,3 @@ export const Registration = () => {
         </FormContainer>
     )
 }
-
-const FormContainer: FC<{
-    onSubmit: (e: FormEvent<HTMLFormElement>) => unknown
-    children: ReactNode
-}> = ({onSubmit, children}) => (
-    <div>
-        <form
-            onSubmit={onSubmit}
-            className={'py-6 px-16 mx-12 mt-8 bg-white rounded-3xl shadow-lg'}
-        >
-            {children}
-        </form>
-    </div>
-)
