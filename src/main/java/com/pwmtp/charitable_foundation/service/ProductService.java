@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +33,12 @@ public class ProductService {
     }
 
     public List<Product> getAll() {
-        return PRODUCT_DAO.findAllOrdered();
+        List<Product> products = new ArrayList<>();
+        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.MEDICINES));
+        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.TECHNICS));
+        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.INTERIOR));
+        products.addAll(PRODUCT_DAO.findProductByCategory(ProductCategory.OTHER));
+        return products;
     }
 
     public List<Product> getByUserID(Long id) {
