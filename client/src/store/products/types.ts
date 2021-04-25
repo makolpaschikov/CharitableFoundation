@@ -2,6 +2,7 @@ import {Category} from 'src/util/categories'
 import {LoadingStatus} from 'src/util/loading-status'
 
 export type Product = {
+    id: number
     name: string
     description: string
     photos: string[]
