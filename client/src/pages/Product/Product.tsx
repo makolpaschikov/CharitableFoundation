@@ -93,7 +93,8 @@ const GetContact: FC<{product: TProduct}> = ({product}) => {
         )
         try {
             const result = await ky
-                .get(ENDPOINTS.getContacts + `?id=${product.id}`, {
+                // @ts-ignore
+                .get(ENDPOINTS.getContacts + `?id=${product.userID}`, {
                     credentials: 'include',
                 })
                 .json<{email: string; name: string}>()
