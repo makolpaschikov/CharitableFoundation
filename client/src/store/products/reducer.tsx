@@ -18,7 +18,7 @@ export const getProductsReducer = (_my = false) =>
             builder.addCase(
                 loadProducts.rejected,
                 (state, {payload}): ProductState => {
-                    if (!payload || payload.my !== _my) return state
+                    if (!payload || (payload.my || false) !== _my) return state
                     const {msg} = payload
                     if (!msg) return state
                     return {status: LoadingStatus.ERROR, error: msg}
@@ -26,7 +26,7 @@ export const getProductsReducer = (_my = false) =>
             )
             builder.addCase(
                 loadProducts.fulfilled,
-                (state, {payload: {categories, my}}): ProductState => {
+                (state, {payload: {categories, my = false}}): ProductState => {
                     if (my !== _my) return state
                     return {status: LoadingStatus.SUCCESS, categories}
                 }

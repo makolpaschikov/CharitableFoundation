@@ -15,6 +15,7 @@ export const Catalog: FC<{my?: boolean}> = ({my}) => {
     const products = useSelector((state: AppState) =>
         my ? state.myProducts : state.products
     )
+    console.log(products, my)
 
     useEffect(() => {
         if (products.status === LoadingStatus.NONE) {
