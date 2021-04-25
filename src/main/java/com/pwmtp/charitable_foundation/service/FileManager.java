@@ -1,7 +1,6 @@
 package com.pwmtp.charitable_foundation.service;
 
 import com.pwmtp.charitable_foundation.domain.Product;
-import com.pwmtp.charitable_foundation.domain.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,15 +25,14 @@ public class FileManager {
      * @param product - the product
      * @return        - true if the image was saved, else false
      */
-    static public boolean saveImage(MultipartFile image, long userID, Product product) {
+    static public String saveImage(MultipartFile image, String email, String productName) {
         try {
-            String dirForTransfer = createImgName(image.getOriginalFilename(), userID, product.getId());
+            String dirForTransfer = createImgName(image.getOriginalFilename(), email, productName);
             image.transferTo(new File(dirForTransfer));
-            product.getImages().add(IMAGES_DIR + dirForTransfer.replaceAll(ROOT_DIR, ""));
-            return true;
+            return dirForTransfer.replace(ROOT_DIR, "");
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -43,8 +41,8 @@ public class FileManager {
      * @param productID - name of image (id of image product)
      * @return          - true if the image was deleted, else false
      */
-    static public boolean deleteProductImages(long userID, long productID) {
-        String imageDir = createImgDirName(userID, productID);
+    static public boolean deleteProductImages(String email, long productID) {
+        String imageDir = createImgDirName(email, productID);
         return new File(imageDir).delete();
     }
 
@@ -53,9 +51,9 @@ public class FileManager {
      * @param file - saved file
      * @return     - true if the image was saved, else false
      */
-    static public String saveFile(MultipartFile file, User user, FileType type) {
+    static public String saveFile(MultipartFile file, String email, FileType type) {
         try {
-            String dirForTransfer = createFileName(file.getOriginalFilename(), user.getEmail(), type);
+            String dirForTransfer = createFileName(file.getOriginalFilename(), email, type);
             file.transferTo(new File(dirForTransfer));
             return dirForTransfer.replace(ROOT_DIR, "");
         } catch (IOException e) {
@@ -66,20 +64,20 @@ public class FileManager {
 
     /*-------------- Private --------------*/
 
-    static private String createImgName(String fileName, long userID, long productID) {
+    static private String createImgName(String fileName, String email, String productName) {
         String dir = ROOT_DIR + File.separator +
                 "resources" + File.separator +
                 "images" + File.separator +
-                userID + File.separator + productID;
+                email + File.separator + productName;
         directoryValidating(new File(dir));
         return dir + File.separator + fileName;
     }
 
-    static private String createImgDirName(long userID, long productID) {
+    static private String createImgDirName(String email, long productID) {
         return ROOT_DIR + File.separator +
                 "resources" + File.separator +
                 "images" + File.separator +
-                userID + File.separator + productID;
+                email + File.separator + "Product" + productID;
     }
 
     static private String createFileName(String fileName, String email, FileType type) {
