@@ -47,7 +47,7 @@ public class ProductController {
 
     @PreAuthorize("hasAuthority('DISTRIBUTOR')")
     @RequestMapping(value = "/my-products", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> getProductsOfUser(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Map<ProductCategory, List<Product>>> getProductsOfUser(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(PRODUCT_SERVICE.getByUserID(user.getId()), HttpStatus.OK);
     }
 

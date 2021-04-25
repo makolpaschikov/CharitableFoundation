@@ -23,10 +23,6 @@ public class ProductService {
         this.USER_SERVICE = userService;
     }
 
-    public void update(Product product) {
-        PRODUCT_DAO.save(product);
-    }
-
     public boolean addProduct(User user, List<MultipartFile> images, Product product) {
         product.setImage(FileManager.saveImage(images.get(0), user.getEmail(), product.getName()));
         PRODUCT_DAO.save(product);
@@ -42,12 +38,13 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getByUserID(Long id) {
-        return PRODUCT_DAO.findProductByUserID(id);
-    }
-
-    public List<Product> getByCategory(ProductCategory category) {
-        return PRODUCT_DAO.findProductByCategory(category);
+    public Map<ProductCategory, List<Product>> getByUserID(Long id) {
+        Map<ProductCategory, List<Product>> products = new HashMap<>();
+        products.put(ProductCategory.MEDICINES, PRODUCT_DAO.findProductByUserIDAndCategory(id, ProductCategory.MEDICINES));
+        products.put(ProductCategory.TECHNICS, PRODUCT_DAO.findProductByUserIDAndCategory(id, ProductCategory.TECHNICS));
+        products.put(ProductCategory.INTERIOR, PRODUCT_DAO.findProductByUserIDAndCategory(id, ProductCategory.INTERIOR));
+        products.put(ProductCategory.OTHER, PRODUCT_DAO.findProductByUserIDAndCategory(id, ProductCategory.OTHER));
+        return products;
     }
 
     public boolean deleteByID(Long userID, Long productID) {
