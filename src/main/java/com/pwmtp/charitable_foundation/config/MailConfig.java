@@ -24,6 +24,10 @@ public class MailConfig {
     @Value("${spring.mail.password}")
     private String password;
 
+    /**
+     * Creates a Bean for the mail sender
+     * @return - object of mail sender 'fondzdrav.platform@gmail.com'
+     */
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -31,10 +35,8 @@ public class MailConfig {
         mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
-
         Properties properties = mailSender.getJavaMailProperties();
         properties.setProperty("mail.transport.protocol", protocol);
-
         return mailSender;
     }
 }

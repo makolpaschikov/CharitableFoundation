@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -25,16 +24,19 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         this.USER_SERVICE = USER_SERVICE;
     }
 
+    /**
+     * Indicates user service and password
+     * @param auth - manager of authentication
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(USER_SERVICE).passwordEncoder(USER_SERVICE.getPasswordEncoder());
     }
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
-    }
-
+    /**
+     * Allows cors to handle 'http://localhost:3000' and includes credentials
+     * @param registry - registry of cors
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -42,24 +44,35 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
                 .allowCredentials(true);
     }
 
+    /**
+     * Configures the web security
+     * Disabled token (due to lack of time for development), allowed requests for all endpoints,
+     *      changed endpoints for login and logout
+     * @param http - the web security configurer
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .mvcMatchers("/**", "/signup/activate/*").permitAll()
+                    .mvcMatchers("/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/api/login")
                     .permitAll()
                 .and()
-                    .logout().logoutUrl("/api/logout").logoutSuccessUrl("/")
+                    .logout().logoutUrl("/api/logout")
                     .permitAll();
     }
 
+    /**
+     * Configures endpoints to get resources
+     * @param registry - endpoints configurer
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Endpoints for resources
         registry
                 .addResourceHandler("/resources/images/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/resources/images/");
@@ -67,6 +80,7 @@ public class MvcConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
                 .addResourceHandler("/resources/files/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/resources/files/");
 
+        // Endpoints for ReactJS
         registry
                 .addResourceHandler("/static/**")
                 .addResourceLocations("file:/" + PROJECT_DIR + "/client/build/static/");

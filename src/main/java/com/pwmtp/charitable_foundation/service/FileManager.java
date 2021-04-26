@@ -1,6 +1,5 @@
 package com.pwmtp.charitable_foundation.service;
 
-import com.pwmtp.charitable_foundation.domain.Product;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,15 +14,15 @@ public class FileManager {
     }
     
     static private final String ROOT_DIR = System.getProperty("user.dir");
-    static private final String IMAGES_DIR = "/resources/images";
 
     /*-------------- Public --------------*/
 
     /**
-     * Saves the file to directory 'resources/static/images'
-     * @param image   - saved image
-     * @param product - the product
-     * @return        - true if the image was saved, else false
+     * Saves the file to directory 'resources/images/{email}/{productName}'
+     * @param image       - saved image
+     * @param email       - email of product owner
+     * @param productName - name of product
+     * @return            - path to image or null (if the image could not be saved)
      */
     static public String saveImage(MultipartFile image, String email, String productName) {
         try {
@@ -37,19 +36,22 @@ public class FileManager {
     }
 
     /**
-     * Deleted the file from directory 'resources/static/images'
-     * @param productID - name of image (id of image product)
-     * @return          - true if the image was deleted, else false
+     * Deleted the image from directory 'resources/images/{email}/{productName}'
+     * @param email       - email of product owner
+     * @param productName - name of product
+     * @return            - <b>true</b> if the image was deleted, otherwise <b>false</b>
      */
-    static public boolean deleteProductImages(String email, long productID) {
-        String imageDir = createImgDirName(email, productID);
+    static public boolean deleteProductImages(String email, String productName) {
+        String imageDir = createImgDirName(email, productName);
         return new File(imageDir).delete();
     }
 
     /**
      * Saves the file to directory 'resources/static/images'
-     * @param file - saved file
-     * @return     - true if the image was saved, else false
+     * @param file  - saved file
+     * @param email - email of file owner
+     * @param type  - type of file {@link FileType}
+     * @return      - path to file or null (if the file could not be saved)
      */
     static public String saveFile(MultipartFile file, String email, FileType type) {
         try {
@@ -73,11 +75,11 @@ public class FileManager {
         return dir + File.separator + fileName;
     }
 
-    static private String createImgDirName(String email, long productID) {
+    static private String createImgDirName(String email, String productName) {
         return ROOT_DIR + File.separator +
                 "resources" + File.separator +
                 "images" + File.separator +
-                email + File.separator + "Product" + productID;
+                email + File.separator + productName;
     }
 
     static private String createFileName(String fileName, String email, FileType type) {

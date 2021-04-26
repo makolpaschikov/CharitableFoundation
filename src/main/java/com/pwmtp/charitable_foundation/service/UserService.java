@@ -1,7 +1,6 @@
 package com.pwmtp.charitable_foundation.service;
 
 import com.pwmtp.charitable_foundation.domain.User;
-import com.pwmtp.charitable_foundation.domain.UserRole;
 import com.pwmtp.charitable_foundation.repository.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,10 +33,21 @@ public class UserService implements UserDetailsService {
 
     /*---------- Save ----------*/
 
+    /**
+     * Overwrites the user in the database
+     * @param user - rewritable user
+     */
     public void update(User user) {
         USER_DAO.save(user);
     }
 
+    /**
+     * Adds a user to the database and sends a message to his mail to activate the account
+     * @param user        - {@link com.pwmtp.charitable_foundation.controller.RegisterController#register}
+     * @param application - {@link com.pwmtp.charitable_foundation.controller.RegisterController#register}
+     * @param identity    - {@link com.pwmtp.charitable_foundation.controller.RegisterController#register}
+     * @return            - <b>true</b> if the user was registered, otherwise <b>false</b>
+     */
     public boolean register(User user, MultipartFile application, MultipartFile identity) {
         if (getByEmail(user.getEmail()) != null) return false;
 
@@ -51,11 +61,14 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    /**
+     * Activates the user by the received activation code
+     * @param code - activation code
+     */
     public void activateUser(String code) {
         User user = USER_DAO.findUserByActivationCode(code);
-        if(user == null) {
-            return;
-        }
+        if(user == null) return;
+
         user.setActivated(true);
         user.setActivationCode(null);
         update(user);
@@ -63,30 +76,22 @@ public class UserService implements UserDetailsService {
 
     /*---------- Get ----------*/
 
+    /**
+     * Returns the user by id
+     * @param id - id of user
+     * @return   - object of user
+     */
     public User getByID(Long id) {
         return USER_DAO.findUserById(id);
     }
 
+    /**
+     * Returns the user by email
+     * @param email - email of user
+     * @return      - object of user
+     */
     public User getByEmail(String email) {
         return USER_DAO.findUserByEmail(email);
-    }
-
-    public User getByRole(UserRole role) {
-        return USER_DAO.findUserByRoles(role);
-    }
-
-    /*---------- Delete ----------*/
-
-    public void deleteByID(Long id) {
-        USER_DAO.deleteById(id);
-    }
-
-    public void deleteByObject(User user) {
-        USER_DAO.delete(user);
-    }
-
-    public void deleteAll() {
-        USER_DAO.deleteAll();
     }
 
     /*---------- User details ----------*/

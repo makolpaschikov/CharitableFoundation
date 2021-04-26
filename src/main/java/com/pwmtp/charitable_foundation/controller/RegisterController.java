@@ -19,19 +19,30 @@ public class RegisterController {
         this.USER_SERVICE = USER_SERVICE;
     }
 
+    /**
+     * The controller that logs the user into the database
+     * @param username    - name of organization
+     * @param password    - account password
+     * @param email       - organization email
+     * @param application - application file
+     * @param identity    - organization confirmation file
+     * @return            - 200 if the user is registered, otherwise 400
+     */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<String> register(
-            @RequestParam String username,
-            @RequestParam String password,
-            @RequestParam String email,
-            @RequestParam MultipartFile application,
-            @RequestParam MultipartFile identity
+            @RequestParam String username, @RequestParam String password, @RequestParam String email,
+            @RequestParam MultipartFile application, @RequestParam MultipartFile identity
     ) {
         return USER_SERVICE.register(new User(username, email, password), application, identity)
                 ? new ResponseEntity<>("successful result", HttpStatus.OK)
                 : new ResponseEntity<>("this user is already registered", HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * The controller that activates the organization's account
+     * @param code - activation code
+     * @return     - RedirectView that redirects the user to the login page 'http://localhost:3000/login'
+     */
     @RequestMapping(value = "/activate/{code}", method = RequestMethod.GET)
     public Object activate(@PathVariable String code) {
         USER_SERVICE.activateUser(code);
