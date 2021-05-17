@@ -1,13 +1,13 @@
 # CharitableFoundation
 Project for a hackathon for a medical foundation
 
-Frontend: [Alexey Chashin](https://github.com/ialexi-bl)
+Frontend (React js): [Alexey Chashin](https://github.com/ialexi-bl)
 
-Backend:  [Maxim Kolpaschikov](https://github.com/makolpaschikov)
+Backend (Java spring):  [Maxim Kolpaschikov](https://github.com/makolpaschikov)
 
-Backend:  [Pavel Tabakov](https://github.com/PashaThrowsException78)
+Backend (Java spring):  [Pavel Tabakov](https://github.com/PashaThrowsException78)
 
-Backend:  [Ilya Aristarkhov](https://github.com/ilya201232)
+Backend (Java spring):  [Ilya Aristarkhov](https://github.com/ilya201232)
 
 Design:   [Angelina Doronina](https://vk.com/itshhow)
 
